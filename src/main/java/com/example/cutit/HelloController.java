@@ -9,7 +9,7 @@ public class HelloController {
     @FXML
     private Label welcomeText;
     @FXML
-    private MediaView mediaView;
+    public MediaView mediaView;
 
     @FXML
     protected void onHelloButtonClick() {
