@@ -1,9 +1,8 @@
-package com.example.cutit;
+package com.project.cutit;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
@@ -18,13 +17,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Map;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
     public MediaPlayer mediaPlayer;
     public Boolean playing = false;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("player.fxml"));
+        var scene = new Scene(fxmlLoader.load(), 1280, 720);
 
         //AnchorPane pane = fxmlLoader.load();
 

@@ -1,4 +1,4 @@
-package com.example.cutit;
+package com.project.cutit;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -13,13 +13,15 @@ import javafx.util.Duration;
 import java.util.Objects;
 
 
-public class HelloController {
+public class PlayerController {
     @FXML
     private Label welcomeText;
     @FXML
     private TextField seekTextField;
     @FXML
     public MediaView mediaView;
+
+    private MediaPlayer plr;
 
     @FXML
     protected void onTextInput(KeyEvent event) {
@@ -29,7 +31,7 @@ public class HelloController {
             evChar = event.getText().charAt(0);
         }
 
-        MediaPlayer plr = mediaView.getMediaPlayer();
+        plr = mediaView.getMediaPlayer();
 
         if(plr == null){
             System.out.println("Player is null");
@@ -39,13 +41,13 @@ public class HelloController {
         Media m = plr.getMedia();
         Duration target = new Duration(0.0);
 
-        if(m.getSource() == ""){
+        if(Objects.equals(m.getSource(), "")){
             System.out.println("No source");
             return;
         }
 
         if(evChar != null){
-            //if its isnt a digit or ":", return
+            //if its isn't a digit or ":", return
             if(!(Character.isDigit(evChar) || evChar.equals(':'))){
                 System.out.println("Invalid char");
                 System.out.println(Character.isDigit(evChar));
@@ -86,4 +88,14 @@ public class HelloController {
         System.out.println("currently at: "+plr.getCurrentTime());
         event.consume();
     }
+    public void Play(){
+        plr.play();
+    }
+    public void Pause(){
+        plr.stop();
+    }
+    public void Reset(){
+        if (plr.getStatus() != MediaPlayer.Status.READY) plr.seek(Duration.seconds(0.0));
+    }
+
 }

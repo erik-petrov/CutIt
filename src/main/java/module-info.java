@@ -4,6 +4,6 @@ module com.example.cutit {
     requires javafx.media;
 
 
-    opens com.example.cutit to javafx.fxml;
-    exports com.example.cutit;
+    opens com.project.cutit to javafx.fxml;
+    exports com.project.cutit;
 }

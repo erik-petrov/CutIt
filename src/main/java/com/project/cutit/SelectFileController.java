@@ -1,4 +1,4 @@
-package com.example.cutit;
+package com.project.cutit;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
