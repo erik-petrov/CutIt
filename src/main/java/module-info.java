@@ -1,9 +1,9 @@
-module com.example.cutit {
+module com.project.cutit {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
 
 
-    opens com.example.cutit to javafx.fxml;
-    exports com.example.cutit;
+    opens com.project.cutit to javafx.fxml;
+    exports com.project.cutit;
 }

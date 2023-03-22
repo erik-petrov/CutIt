@@ -1,0 +1,27 @@
+POSSIBLE project features
+
+0. Translation, so the app can be in english and estonian
+
+1. Playing the video using
+
+2. Trim video: Allow users to select a portion of the video they want to keep and remove the rest. This feature can be implemented using the JavaFX Media and MediaPlayer classes.
+
+3. Add text to video: Allow users to add text to their video at a specific time frame. This feature can be implemented using the JavaFX Text class and the Media and MediaPlayer classes.
+
+4. Add audio to video: Allow users to add an audio file to their video. This feature can be implemented using the JavaFX Media and MediaPlayer classes.
+
+5. Adjust playback speed: Allow users to adjust the playback speed of the video. This feature can be implemented using the JavaFX Media and MediaPlayer classes.
+
+6. Crop video: Allow users to select a portion of the video they want to keep and remove the rest. This feature can be implemented using the JavaFX ImageView and WritableImage classes.
+
+7. Add transitions: Allow users to add transitions between video clips or images. This feature can be implemented using the JavaFX Animation and Timeline classes.
+
+8. Adjust brightness and contrast: Allow users to adjust the brightness and contrast of the video. This feature can be implemented using the JavaFX ColorAdjust class.
+
+9. Add filters: Allow users to add filters such as grayscale, sepia, or black and white to their video. This feature can be implemented using the JavaFX ColorAdjust class.
+
+10. Export video: Allow users to export their edited video to a file. This feature can be implemented using the JavaFX Media and MediaPlayer classes, along with a video encoder library such as Xuggler or ffmpeg.
+
+11. Fullscreen ability: Allow users to maximise the program without breaking the style
+
+The project will start with a startup screen saying to select a file. After it goes to the module select where the user will pick what to do with the video(above-mentioned features).
