@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.project.cutit.Startup"
-            prefHeight="400.0" prefWidth="600.0">
-
-    <MediaView fx:id="mediaView" fitHeight="600.0" fitWidth="600.0" layoutX="320.0">
-        <cursor>
-            <Cursor fx:constant="OPEN_HAND" />
-        </cursor>
-    </MediaView>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.StartupController">
+    <Label id="dragLabel" alignment="CENTER" onDragDropped="#OnDragDropped" onDragOver="#OnDragOver" prefHeight="400.0" prefWidth="600.0" text="Drag a file to start" textAlignment="CENTER">
+        <font>
+            <Font name="System Italic" size="64.0" />
+        </font>
+    </Label>
+   <Button layoutX="254.0" layoutY="342.0" mnemonicParsing="false" onAction="#OpenFileDialog" prefHeight="44.0" prefWidth="91.0" text="Open">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font>
+   </Button>
 </AnchorPane>

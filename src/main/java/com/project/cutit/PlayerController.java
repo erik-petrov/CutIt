@@ -1,101 +1,68 @@
 package com.project.cutit;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
-import java.util.Objects;
 
 
 public class PlayerController {
     @FXML
-    private Label welcomeText;
-    @FXML
-    private TextField seekTextField;
-    @FXML
     public MediaView mediaView;
-
-    private MediaPlayer plr;
-
     @FXML
-    protected void onTextInput(KeyEvent event) {
-        Character evChar = null;
-        KeyCode code = event.getCode();
-        if(code.isDigitKey() || code.isLetterKey()){ //text != ""
-            evChar = event.getText().charAt(0);
-        }
+    public Pane playerPane;
+    private MediaPlayer mediaPlayer;
 
-        plr = mediaView.getMediaPlayer();
-
-        if(plr == null){
-            System.out.println("Player is null");
-            return;
-        }
-
-        Media m = plr.getMedia();
-        Duration target = new Duration(0.0);
-
-        if(Objects.equals(m.getSource(), "")){
-            System.out.println("No source");
-            return;
-        }
-
-        if(evChar != null){
-            //if its isn't a digit or ":", return
-            if(!(Character.isDigit(evChar) || evChar.equals(':'))){
-                System.out.println("Invalid char");
-                System.out.println(Character.isDigit(evChar));
-                System.out.println(evChar.equals(":"));
-                return;
-            }
-        }
-
-        String time = seekTextField.getText();
-        String[] timeArr = time.split(":");
-        System.out.println(time);
-        switch (timeArr.length){
-            case 1:
-                target = target.add(new Duration(
-                        Integer.parseInt(timeArr[0])
-                ));
-                break;
-            case 2:
-                target = target.add(new Duration(
-                        Integer.parseInt(timeArr[0]) * 60
-                                +
-                           Integer.parseInt(timeArr[1])
-                ));
-                break;
-            case 3:
-                target = target.add(new Duration(
-                        Integer.parseInt(timeArr[0]) * 60
-                        +
-                        Integer.parseInt(timeArr[1])
-                        +
-                        Float.parseFloat(timeArr[2])/1000
-                ));
-                break;
-            default:
-                break;
-        }
-        plr.seek(target.multiply(1000));
-        System.out.println("currently at: "+plr.getCurrentTime());
-        event.consume();
+    public PlayerController() {
     }
+
+    public void initialize() {
+        Media media = new Media(Main.getFilePath());
+        mediaPlayer = new MediaPlayer(media);
+        mediaView = new MediaView(mediaPlayer);
+
+        var height = playerPane.getHeight();
+
+        mediaView.setViewport( new Rectangle2D(0,0, height, CalculateWidthByAspectRatio(height)));
+
+        mediaView.setPreserveRatio(true);
+
+        System.out.println(mediaView.getFitHeight());
+
+    }
+
+    private double CalculateWidthByAspectRatio(double height){
+        var ratio = 1.7778;
+        return height * ratio;
+    }
+    /*private EventHandler<KeyEvent> keyListener = new EventHandler<>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if(event.getCode() == KeyCode.SPACE) {
+                if(playing){
+                    mediaPlayer.pause();
+                }
+                else{
+                    mediaPlayer.play();
+                }
+                playing = !playing;
+            }
+            event.consume();
+        }
+    };*/
+
     public void Play(){
-        plr.play();
+        mediaPlayer.play();
     }
     public void Pause(){
-        plr.stop();
+        mediaPlayer.stop();
     }
     public void Reset(){
-        if (plr.getStatus() != MediaPlayer.Status.READY) plr.seek(Duration.seconds(0.0));
+        if (mediaPlayer.getStatus() != MediaPlayer.Status.READY) mediaPlayer.seek(Duration.seconds(0.0));
     }
 
 }

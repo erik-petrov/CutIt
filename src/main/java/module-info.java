@@ -1,4 +1,4 @@
-module com.example.cutit {
+module com.project.cutit {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;

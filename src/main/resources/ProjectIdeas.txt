@@ -1,4 +1,6 @@
-POSSIBLE project features using created using ChatGpt( javafx, java video player, semi-easy features to implement)
+POSSIBLE project features
+
+0. Translation, so the app can be in english and estonian
 
 1. Playing the video using
 
@@ -19,5 +21,7 @@ POSSIBLE project features using created using ChatGpt( javafx, java video player
 9. Add filters: Allow users to add filters such as grayscale, sepia, or black and white to their video. This feature can be implemented using the JavaFX ColorAdjust class.
 
 10. Export video: Allow users to export their edited video to a file. This feature can be implemented using the JavaFX Media and MediaPlayer classes, along with a video encoder library such as Xuggler or ffmpeg.
+
+11. Fullscreen ability: Allow users to maximise the program without breaking the style
 
 The project will start with a startup screen saying to select a file. After it goes to the module select where the user will pick what to do with the video(above-mentioned features).
