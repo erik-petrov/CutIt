@@ -57,11 +57,11 @@ public class StartupController {
         }
     }
     public void LanguageEt(){
-        Main.setLocale("et");
+        Main.setLocale("et-ET");
         Main.switchScene("startup");
     }
     public void LanguageEn(){
-        Main.setLocale("en");
+        Main.setLocale("en-GB");
         Main.switchScene("startup");
 
     }

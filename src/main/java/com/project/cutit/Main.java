@@ -16,7 +16,7 @@ import static java.util.ResourceBundle.getBundle;
 public class Main extends Application {
     private static String filePath;
     private static Stage stage;
-    private static Locale projectLocale = new Locale("en");
+    private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
@@ -61,7 +61,7 @@ public class Main extends Application {
         return fxmlFile;
     }
     public static void setLocale(String newLocale){
-        projectLocale = new Locale(newLocale);
+        projectLocale = Locale.forLanguageTag(newLocale);
     }
     public static String getFilePath() {
         return filePath;
