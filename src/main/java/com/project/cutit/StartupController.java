@@ -56,4 +56,13 @@ public class StartupController {
             Main.switchScene("modules");
         }
     }
+    public void LanguageEt(){
+        Main.setLocale("et");
+        Main.switchScene("startup");
+    }
+    public void LanguageEn(){
+        Main.setLocale("en");
+        Main.switchScene("startup");
+
+    }
 }

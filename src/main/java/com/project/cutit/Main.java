@@ -9,22 +9,30 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
+
+import static java.util.ResourceBundle.getBundle;
 
 public class Main extends Application {
-    private static String filePath = "C:\\Users\\Calm\\IdeaProjects\\CutIt\\src\\main\\resources\\Videos\\sample.mp4";
+    private static String filePath;
     private static Stage stage;
+    private static Locale projectLocale = new Locale("en");
+
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
+        fxmlLoader.setResources(getBundle(Main.class.getPackageName()+".translation", projectLocale));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
         Main.stage = stage;
     }
-
     public static void switchScene(String fxmlFile) {
+        var filename = CheckFilename(fxmlFile);
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlFile + ".fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
+            loader.setResources(getBundle(Main.class.getPackageName()+".translation", projectLocale));
+
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
@@ -39,12 +47,22 @@ public class Main extends Application {
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception var4) {
-            var4.printStackTrace();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
     }
-
+    public static String CheckFilename(String fxmlFile) {
+        var a = fxmlFile.split("(\\.)");
+        if (a.length == 1){
+            return fxmlFile + ".fxml";
+        }
+        return fxmlFile;
+    }
+    public static void setLocale(String newLocale){
+        projectLocale = new Locale(newLocale);
+    }
     public static String getFilePath() {
         return filePath;
     }
@@ -53,5 +71,5 @@ public class Main extends Application {
         filePath = newValue;
     }
 
-    public static void main(String[] args) {launch();}
+    public static void main(String[] args) { launch(args); }
 }
