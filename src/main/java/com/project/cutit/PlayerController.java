@@ -1,7 +1,11 @@
 package com.project.cutit;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -15,6 +19,8 @@ public class PlayerController {
     public MediaView mediaView;
     @FXML
     public Pane playerPane;
+    @FXML
+    public Button toggleButton;
     private MediaPlayer mediaPlayer;
 
     public PlayerController() {
@@ -23,11 +29,13 @@ public class PlayerController {
     public void initialize() {
         Media media = new Media(Main.getFilePath());
         mediaPlayer = new MediaPlayer(media);
-        mediaView = new MediaView(mediaPlayer);
+        mediaPlayer.setOnReady(() -> playerPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
+//        mediaView = new MediaView(mediaPlayer);
+        mediaView.setMediaPlayer(mediaPlayer);
 
         var height = playerPane.getHeight();
 
-        mediaView.setViewport( new Rectangle2D(0,0, height, CalculateWidthByAspectRatio(height)));
+//        mediaView.setViewport( new Rectangle2D(0,0, height, CalculateWidthByAspectRatio(height)));
 
         mediaView.setPreserveRatio(true);
 
@@ -39,30 +47,27 @@ public class PlayerController {
         var ratio = 1.7778;
         return height * ratio;
     }
-    /*private EventHandler<KeyEvent> keyListener = new EventHandler<>() {
+    private EventHandler<KeyEvent> keyListener = new EventHandler<>() {
         @Override
         public void handle(KeyEvent event) {
             if(event.getCode() == KeyCode.SPACE) {
-                if(playing){
-                    mediaPlayer.pause();
-                }
-                else{
-                    mediaPlayer.play();
-                }
-                playing = !playing;
+                Toggle();
             }
             event.consume();
         }
-    };*/
+    };
 
-    public void Play(){
-        mediaPlayer.play();
+    public void Toggle(){
+        boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
+        if(playing){
+            mediaPlayer.pause();
+            toggleButton.setText("Play");
+        }else{
+            mediaPlayer.play();
+            toggleButton.setText("Pause");
+        }
+
     }
-    public void Pause(){
-        mediaPlayer.stop();
-    }
-    public void Reset(){
-        if (mediaPlayer.getStatus() != MediaPlayer.Status.READY) mediaPlayer.seek(Duration.seconds(0.0));
-    }
+    public void Reset(){mediaPlayer.stop();}
 
 }
