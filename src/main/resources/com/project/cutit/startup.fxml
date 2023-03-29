@@ -23,6 +23,11 @@
                <MenuItem mnemonicParsing="false" onAction="#LanguageEt" text="%menu.lang.et" />
          </items>
        </Menu>
+         <Menu mnemonicParsing="false" text="%menu.seek">
+             <items>
+                 <MenuItem mnemonicParsing="false" onAction="" text="%menu.seek" />
+             </items>
+         </Menu>
      </menus>
    </MenuBar>
 </AnchorPane>
