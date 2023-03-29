@@ -28,7 +28,7 @@ public class PlayerController {
         mediaPlayer.setOnReady(() -> playerPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
         mediaView.setMediaPlayer(mediaPlayer);
 
-        mediaView.setPreserveRatio(true);
+        //mediaView.setPreserveRatio(true);
 
         System.out.println(mediaView.getFitHeight());
 
