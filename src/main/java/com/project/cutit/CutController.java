@@ -1,8 +1,13 @@
 package com.project.cutit;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
@@ -19,6 +24,8 @@ public class CutController extends Application {
     private RangeSlider seekSlider;
     @FXML
     private MediaView mediaView;
+    @FXML
+    private Button CutIt;
     private MediaPlayer mediaPlayer;
 
     public static void main(String[] args) {
@@ -26,15 +33,21 @@ public class CutController extends Application {
     }
 
     public void initialize() {
-        Media media = new Media(Main.getFilePath());
-
+        Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
+        mediaPlayer.setOnReady(() -> {
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
+            seekSlider.setMax(media.getDuration().toMillis());
+            seekSlider.adjustHighValue(seekSlider.getMax());
+        });
         mediaView.setMediaPlayer(mediaPlayer);
 
-        seekSlider.setOn
+        seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
+        seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
     }
+
     private final EventHandler<KeyEvent> keyListener = event -> {
+        System.out.println("hii");
         if(event.getCode() == KeyCode.SPACE) {
             Toggle();
         }
@@ -46,13 +59,15 @@ public class CutController extends Application {
         if(playing){
             mediaPlayer.pause();
         }else{
+            mediaPlayer.setStartTime(new Duration(seekSlider.getHighValue()));
+            mediaPlayer.setStopTime(new Duration(seekSlider.getHighValue()));
             mediaPlayer.play();
         }
 
     }
 
-    public void SeekToDestination(double dest){
-        mediaPlayer.seek(new Duration(dest));
+    public void Cut(){
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -15,8 +16,8 @@ public class StartupController {
         Dragboard dragboard = dragEvent.getDragboard();
         boolean success = false;
         if (dragboard.hasFiles()) {
-
-            Main.setFilePath(dragboard.getFiles().get(0).toURI().toString());
+            Media media = new Media(dragboard.getFiles().get(0).toURI().toString());
+            Main.setMedia(media);
             Main.switchScene("modules");
             success = true;
         }
@@ -52,7 +53,8 @@ public class StartupController {
         // Check if a file was selected
         if (selectedFile != null) {
             // Do something with the selected file
-            Main.setFilePath(selectedFile.toURI().toString());
+            Media media = new Media(selectedFile.toURI().toString());
+            Main.setMedia(media);
             Main.switchScene("modules");
         }
     }

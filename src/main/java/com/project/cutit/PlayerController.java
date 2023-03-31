@@ -22,7 +22,7 @@ public class PlayerController {
     private MediaPlayer mediaPlayer;
 
     public void initialize() {
-        Media media = new Media(Main.getFilePath());
+        Media media = Main.getMedia();
 
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> playerPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
