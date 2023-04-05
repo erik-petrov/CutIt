@@ -39,11 +39,13 @@ public class CutController extends Application {
             mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
             seekSlider.setMax(media.getDuration().toMillis());
             seekSlider.adjustHighValue(seekSlider.getMax());
-        });
-        mediaView.setMediaPlayer(mediaPlayer);
 
-        seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
-        seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
+            mediaView.setMediaPlayer(mediaPlayer);
+
+            seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
+            seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
+        });
+
     }
 
     private final EventHandler<KeyEvent> keyListener = event -> {
@@ -67,7 +69,8 @@ public class CutController extends Application {
     }
 
     public void Cut(){
-
+        Main.GenerateCommand("mp4", 1, 24, Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
+        //TODO:make it so that a window pops out
     }
 
     @Override

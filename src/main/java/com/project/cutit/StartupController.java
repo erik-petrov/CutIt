@@ -51,12 +51,15 @@ public class StartupController {
         File selectedFile = fileChooser.showOpenDialog(openButton.getScene().getWindow());
 
         // Check if a file was selected
-        if (selectedFile != null) {
-            // Do something with the selected file
-            Media media = new Media(selectedFile.toURI().toString());
-            Main.setMedia(media);
-            Main.switchScene("modules");
+        if (selectedFile == null) {
+            throw new RuntimeException();
         }
+        Media media = new Media(selectedFile.toURI().toString());
+        if(media.getError() != null){
+            throw new RuntimeException();
+        }
+        Main.setMedia(media);
+        Main.switchScene("modules");
     }
     public void LanguageEt(){
         Main.setLocale("et-ET");
