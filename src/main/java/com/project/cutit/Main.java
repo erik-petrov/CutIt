@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -14,7 +15,7 @@ import java.util.Locale;
 import static java.util.ResourceBundle.getBundle;
 
 public class Main extends Application {
-    private static String filePath;
+    private static Media media;
     private static Stage stage;
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
@@ -63,12 +64,12 @@ public class Main extends Application {
     public static void setLocale(String newLocale){
         projectLocale = Locale.forLanguageTag(newLocale);
     }
-    public static String getFilePath() {
-        return filePath;
+    public static Media getMedia() {
+        return media;
     }
 
-    public static void setFilePath(String newValue) {
-        filePath = newValue;
+    public static void setMedia(Media newValue) {
+        media = newValue;
     }
 
     public static void main(String[] args) { launch(args); }
