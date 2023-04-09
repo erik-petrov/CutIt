@@ -35,8 +35,8 @@ public class Main extends Application {
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
-        FFmpeg = new FFmpeg("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
-        FFprobe = new FFprobe("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+        FFmpeg = new FFmpeg("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
+        FFprobe = new FFprobe("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
         Stage = stage;
     }
     public static void switchScene(String fxmlFile) {
@@ -87,10 +87,10 @@ public class Main extends Application {
         File selectedDirectory = directoryChooser.showDialog(Stage);
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Media.getSource())     // Filename, or a FFmpegProbeResult
+                .setInput(Media.getSource().split("/", 2)[1].replaceAll("%20", " "))     // Filename, or a FFmpegProbeResult
                 .overrideOutputFiles(true) // Override the output if it exists
 
-                .addOutput(selectedDirectory.getPath()+"/output"+format)   // Filename for the destination
+                .addOutput(selectedDirectory.getPath()+"/output."+format)   // Filename for the destination
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")        // using the aac codec
