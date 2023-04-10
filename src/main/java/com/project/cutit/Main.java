@@ -86,7 +86,7 @@ public class Main extends Application {
     }
 
     public static void setMedia(Media newValue) {
-        media = newValue;
+        Media = newValue;
     }
 
     public static void main(String[] args) { launch(args); }
