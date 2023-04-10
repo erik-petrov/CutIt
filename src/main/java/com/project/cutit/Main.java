@@ -26,6 +26,7 @@ public class Main extends Application {
     private static Stage Stage;
     private static FFmpeg FFmpeg;
     private static FFprobe FFprobe;
+
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
@@ -84,7 +85,9 @@ public class Main extends Application {
         return Media;
     }
 
-    public static void setMedia(Media newMedia) { Media = newMedia; }
+    public static void setMedia(Media newValue) {
+        media = newValue;
+    }
 
     public static void main(String[] args) { launch(args); }
     public static void GenerateCommand(String format, Integer audioChannels, Integer framerate, Integer from, Integer to){
