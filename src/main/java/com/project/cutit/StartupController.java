@@ -58,7 +58,6 @@ public class StartupController {
         if(media.getError() != null){
             throw new RuntimeException();
         }
-        System.out.println(media.getSource());
         Main.setMedia(media);
         Main.switchScene("modules");
     }

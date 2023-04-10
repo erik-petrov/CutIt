@@ -4,4 +4,8 @@ public class ModuleController {
     public void ToPlayer() {
         Main.switchScene("player");
     }
+
+    public void ToCut(){
+        Main.switchScene("cut");
+    }
 }

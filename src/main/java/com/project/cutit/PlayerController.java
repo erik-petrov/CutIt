@@ -24,13 +24,11 @@ public class PlayerController {
     public void initialize() {
         Media media = Main.getMedia();
 
-        System.out.println(media.getSource());
-
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> playerPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
         mediaView.setMediaPlayer(mediaPlayer);
 
-        //mediaView.setPreserveRatio(true);
+        //mediaView.setPreserveRatio(true); //causes the video to break, please dont.
 
         System.out.println(mediaView.getFitHeight());
 
