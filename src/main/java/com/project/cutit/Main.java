@@ -35,8 +35,13 @@ public class Main extends Application {
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
-        FFmpeg = new FFmpeg("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
-        FFprobe = new FFprobe("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+        try{
+            FFmpeg = new FFmpeg("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
+            FFprobe = new FFprobe("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+        }catch (Exception e){
+            System.out.println("PLEASE INSTALL ffmpeg INTO resources FOLDER and rename the folder to 'ffmpeg'");
+            System.exit(0);
+        }
         Stage = stage;
     }
     public static void switchScene(String fxmlFile) {
