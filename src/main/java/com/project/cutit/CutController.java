@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.RangeSlider;
 
+import java.io.IOException;
+
 import static java.util.ResourceBundle.getBundle;
 
 public class CutController extends Application {
@@ -68,8 +70,8 @@ public class CutController extends Application {
 
     }
 
-    public void Cut(){
-        Main.GenerateCommand("mp4", 1, 24, Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
+    public void Cut() throws IOException {
+        Main.GenerateCommand("mp4", 1, Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
         //TODO:make it so that a window pops out
     }
 
