@@ -9,6 +9,8 @@ Project Features
 
     4. Style: The application must be styled
 
+    5. FFmpeg process window
+
 2. Features to add, sorted by difficulty:
     1. Adjust playback speed: Allow users to adjust the playback speed of the video. This feature can be implemented using the JavaFX Media and MediaPlayer classes.
 
