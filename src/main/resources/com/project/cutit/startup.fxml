@@ -25,7 +25,7 @@
        </Menu>
          <Menu mnemonicParsing="false" text="%menu.seek">
              <items>
-                 <MenuItem mnemonicParsing="false" onAction="" text="%menu.seek" />
+                 <MenuItem mnemonicParsing="false" onAction="#LanguageEn" text="%menu.seek" />
              </items>
          </Menu>
      </menus>

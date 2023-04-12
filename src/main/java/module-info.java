@@ -4,6 +4,7 @@ module com.project.cutit {
     requires javafx.media;
     requires org.controlsfx.controls;
     requires ffmpeg;
+    requires org.apache.commons.lang3;
 
     opens com.project.cutit to javafx.fxml;
     exports com.project.cutit;

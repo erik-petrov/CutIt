@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
@@ -13,10 +15,13 @@ import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import net.bramp.ffmpeg.probe.FFmpegFormat;
+import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.ResourceBundle.getBundle;
@@ -26,6 +31,7 @@ public class Main extends Application {
     private static Stage Stage;
     private static FFmpeg FFmpeg;
     private static FFprobe FFprobe;
+
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
@@ -35,8 +41,17 @@ public class Main extends Application {
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
-        FFmpeg = new FFmpeg("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
-        FFprobe = new FFprobe("C:\\Users\\kotem\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+        try{
+            FFmpeg = new FFmpeg("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
+            FFprobe = new FFprobe("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+        }catch (Exception e){
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setContentText("PLEASE INSTALL ffmpeg INTO resources FOLDER and rename the folder to 'ffmpeg'");
+            Optional<ButtonType> result = a.showAndWait();
+            if(result.get() != null){
+                System.exit(0);
+            }
+        }
         Stage = stage;
     }
     public static void switchScene(String fxmlFile) {
@@ -79,15 +94,27 @@ public class Main extends Application {
         return Media;
     }
 
-    public static void setMedia(Media newMedia) { Media = newMedia; }
+    public static void setMedia(Media newValue) {
+        Media = newValue;
+    }
 
     public static void main(String[] args) { launch(args); }
-    public static void GenerateCommand(String format, Integer audioChannels, Integer framerate, Integer from, Integer to){
+
+    public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
+
+    public static FFmpegProbeResult getMediaData(Media media) throws IOException {
+        return FFprobe.probe(normalizePath(media.getSource()));
+    }
+
+    public static void GenerateCommand(String format, Integer audioChannels, Integer from, Integer to) throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(Stage);
 
+        Integer framerate = getMediaData(Media).getStreams().get(0).avg_frame_rate.intValue();
+        Long duration = (long)(to.doubleValue() - from.doubleValue());
+
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Media.getSource().split("/", 2)[1].replaceAll("%20", " "))     // Filename, or a FFmpegProbeResult
+                .setInput(normalizePath(Media.getSource()))     // Filename, or a FFmpegProbeResult
                 .overrideOutputFiles(true) // Override the output if it exists
 
                 .addOutput(selectedDirectory.getPath()+"/output."+format)   // Filename for the destination
@@ -102,7 +129,7 @@ public class Main extends Application {
                 .setVideoResolution(Media.getWidth(), Media.getHeight()) // at 640x480 resolution maybe changed
 
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
-                .setDuration((long) (Media.getDuration().toMillis() - to.doubleValue()), TimeUnit.MILLISECONDS)
+                .setDuration(duration, TimeUnit.MILLISECONDS)
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done(); // Allow FFmpeg to use experimental specs
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
