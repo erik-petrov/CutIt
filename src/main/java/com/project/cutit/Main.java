@@ -15,8 +15,8 @@ import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.io.File;
 import java.io.IOException;
@@ -106,11 +106,15 @@ public class Main extends Application {
         return FFprobe.probe(normalizePath(media.getSource()));
     }
 
-    public static void GenerateCommand(String format, Integer audioChannels, Integer from, Integer to) throws IOException {
+    public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(Stage);
 
-        Integer framerate = getMediaData(Media).getStreams().get(0).avg_frame_rate.intValue();
+        FFmpegProbeResult data = getMediaData(Media);
+
+        Integer audioChannels = data.getStreams().get(0).channels;
+        String format = data.getFormat().format_name;
+        Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
         Long duration = (long)(to.doubleValue() - from.doubleValue());
 
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -125,13 +129,40 @@ public class Main extends Application {
                 .setAudioBitRate(32768)
 
                 .setVideoCodec("libx264")     // Video using x264
-                .setVideoFrameRate(framerate, 1)     // at 24 frames per second
+                .setVideoFrameRate(framerate, 1)
                 .setVideoResolution(Media.getWidth(), Media.getHeight()) // at 640x480 resolution maybe changed
 
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
                 .setDuration(duration, TimeUnit.MILLISECONDS)
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done(); // Allow FFmpeg to use experimental specs
+        FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
+        executor.createJob(builder).run();
+    }
+    public static void GenerateSpeedCommand(Fraction Factor) throws IOException {
+        FFmpegProbeResult data = getMediaData(Media);
+
+        Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
+        Integer audioChannels = data.getStreams().get(0).channels;
+        String format = data.getFormat().format_name;
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+                .setInput(normalizePath(Media.getSource()))     // Filename, or a FFmpegProbeResult
+                .overrideOutputFiles(true) // Override the output if it exists
+
+                .addOutput("/temp."+format)   // Filename for the destination
+
+                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioCodec("aac")
+                .setAudioSampleRate(48_000)
+                .setAudioBitRate(32768)
+
+                .setVideoCodec("libx264")
+                .setVideoFrameRate(framerate, 1)
+                .setVideoResolution(Media.getWidth(), Media.getHeight())
+
+                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
+                .setComplexFilter("[0:v]setpts="+Factor.doubleValue()+"*PTS[v];[0:a]atempo="+Factor.getDenominator()+"[a]");
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         executor.createJob(builder).run();
     }

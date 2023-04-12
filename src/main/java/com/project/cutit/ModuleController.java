@@ -1,11 +1,9 @@
 package com.project.cutit;
 
 public class ModuleController {
-    public void ToPlayer() {
-        Main.switchScene("player");
-    }
-
+    public void ToPlayer() { Main.switchScene("player"); }
     public void ToCut(){
         Main.switchScene("cut");
     }
+    public void ToTime(){ Main.switchScene("time"); }
 }
