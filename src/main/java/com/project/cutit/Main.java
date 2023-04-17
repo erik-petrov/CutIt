@@ -63,18 +63,24 @@ public class Main extends Application {
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            Screen screen = Screen.getPrimary();
+            //Screen screen = Screen.getPrimary();
 
             // Get the size of the screen
-            Rectangle2D screenBounds = screen.getVisualBounds();
+            //Rectangle2D screenBounds = screen.getVisualBounds();
 
             // Set the position of the stage to center it
-            Stage.setX((screenBounds.getWidth() - Stage.getWidth()) / 2);
-            Stage.setY((screenBounds.getHeight() - Stage.getHeight()) / 2);
+            //Stage.setX((screenBounds.getWidth() - Stage.getWidth()) / 2);
+            //Stage.setY((screenBounds.getHeight() - Stage.getHeight()) / 2);
 
-            Stage.setScene(scene);
-            Stage.show();
+            Stage stage = new Stage();
 
+            stage.setScene(scene);
+            if(fxmlFile != "modules"){
+                stage.showAndWait();
+            }
+            else{
+                stage.show();
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -139,18 +145,27 @@ public class Main extends Application {
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         executor.createJob(builder).run();
     }
-    public static void GenerateSpeedCommand(Fraction Factor) throws IOException {
+    public static void GenerateSpeedCommand(Double factor) throws IOException {
         FFmpegProbeResult data = getMediaData(Media);
+
+        if(factor < 0){
+            factor = 1/Math.abs(factor);
+        }
+
+        if(factor == 0){
+            factor = 1.0;
+        }
 
         Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
         Integer audioChannels = data.getStreams().get(0).channels;
-        String format = data.getFormat().format_name;
+        if(audioChannels == 0) audioChannels = 1;
+        String format = data.getFormat().format_name.split(",")[0];
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(normalizePath(Media.getSource()))     // Filename, or a FFmpegProbeResult
                 .overrideOutputFiles(true) // Override the output if it exists
 
-                .addOutput("/temp."+format)   // Filename for the destination
+                .addOutput("C:/Users/erikp/Desktop/temp."+format)   // Filename for the destination
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")
@@ -162,7 +177,8 @@ public class Main extends Application {
                 .setVideoResolution(Media.getWidth(), Media.getHeight())
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
-                .setComplexFilter("[0:v]setpts="+Factor.doubleValue()+"*PTS[v];[0:a]atempo="+Factor.getDenominator()+"[a]");
+                .setComplexFilter("[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]")
+                .addExtraArgs("-map", "'[a]'", "-map", "'[v]'");
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         executor.createJob(builder).run();
     }

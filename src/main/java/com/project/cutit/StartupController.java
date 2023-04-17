@@ -12,13 +12,17 @@ import java.io.File;
 
 public class StartupController {
 
+    private void loadAndSwitch(Media media, String where){
+        Main.setMedia(media);
+        Main.switchScene(where);
+    }
+
     public void OnDragDropped(DragEvent dragEvent) {
         Dragboard dragboard = dragEvent.getDragboard();
         boolean success = false;
         if (dragboard.hasFiles()) {
             Media media = new Media(dragboard.getFiles().get(0).toURI().toString());
-            Main.setMedia(media);
-            Main.switchScene("modules");
+            loadAndSwitch(media, "modules");
             success = true;
         }
         /* let the source know whether the string was successfully
@@ -58,8 +62,7 @@ public class StartupController {
         if(media.getError() != null){
             throw new RuntimeException();
         }
-        Main.setMedia(media);
-        Main.switchScene("modules");
+       loadAndSwitch(media, "modules");
     }
     public void LanguageEt(){
         Main.setLocale("et-ET");

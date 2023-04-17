@@ -33,8 +33,7 @@ public class TimeController extends Application {
         launch(args);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void initialize() {
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
@@ -50,7 +49,6 @@ public class TimeController extends Application {
                     Number newValue) {
                 speedFactor.textProperty().setValue(
                         String.valueOf(newValue.intValue()));
-                System.out.println(newValue);
             }
         });
     }
@@ -73,6 +71,10 @@ public class TimeController extends Application {
     }
 
     public void ChangeSpeed() throws IOException {
-        Main.GenerateSpeedCommand(Fraction.getFraction(speedSlider.getValue()));
+        Main.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
     }
 }
