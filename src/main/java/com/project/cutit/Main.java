@@ -134,8 +134,8 @@ public class Main extends Application {
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")        // using the aac codec
-                .setAudioSampleRate(48_000)  // at 48KHz
-                .setAudioBitRate(32768)
+                .setAudioSampleRate(data.getStreams().get(0).sample_rate)
+                .setAudioBitRate(data.getStreams().get(0).bit_rate)
 
                 .setVideoCodec("libx264")     // Video using x264
                 .setVideoFrameRate(framerate, 1)
@@ -173,8 +173,8 @@ public class Main extends Application {
                 .addExtraArgs(extras)
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")
-                .setAudioSampleRate(48_000)
-                .setAudioBitRate(32768)
+                .setAudioSampleRate(data.getStreams().get(0).sample_rate)
+                .setAudioBitRate(data.getStreams().get(0).bit_rate)
 
                 .setVideoCodec("libx264")
                 .setVideoFrameRate(framerate, 1)
