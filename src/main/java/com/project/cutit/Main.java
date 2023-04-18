@@ -31,6 +31,7 @@ public class Main extends Application {
     private static Stage Stage;
     private static FFmpeg FFmpeg;
     private static FFprobe FFprobe;
+    private static String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
 
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
@@ -108,6 +109,8 @@ public class Main extends Application {
 
     public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
 
+    public static String getDesktop() {return System.getProperty("user.home") + "/Desktop";}
+
     public static FFmpegProbeResult getMediaData(Media media) throws IOException {
         return FFprobe.probe(normalizePath(media.getSource()));
     }
@@ -127,7 +130,7 @@ public class Main extends Application {
                 .setInput(normalizePath(Media.getSource()))     // Filename, or a FFmpegProbeResult
                 .overrideOutputFiles(true) // Override the output if it exists
 
-                .addOutput(selectedDirectory.getPath()+"/output."+format)   // Filename for the destination
+                .addOutput(temporaryFilePath)   // Filename for the destination
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")        // using the aac codec
@@ -157,16 +160,17 @@ public class Main extends Application {
         }
 
         Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
-        Integer audioChannels = data.getStreams().get(0).channels;
-        if(audioChannels == 0) audioChannels = 1;
-        String format = data.getFormat().format_name.split(",")[0];
+        Integer audioChannels = data.getStreams().get(0).channels == 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+        String format = data.getFormat().format_name.split(",")[0]; //is mov cuz of [0], dunno if we'll change it
+        String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
+        String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(normalizePath(Media.getSource()))     // Filename, or a FFmpegProbeResult
                 .overrideOutputFiles(true) // Override the output if it exists
 
-                .addOutput("C:/Users/erikp/Desktop/temp."+format)   // Filename for the destination
-
+                .addOutput(temporaryFilePath)   // Filename for the destination
+                .addExtraArgs(extras)
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")
                 .setAudioSampleRate(48_000)
@@ -177,8 +181,7 @@ public class Main extends Application {
                 .setVideoResolution(Media.getWidth(), Media.getHeight())
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
-                .setComplexFilter("[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]")
-                .addExtraArgs("-map", "'[a]'", "-map", "'[v]'");
+                .setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         executor.createJob(builder).run();
     }
