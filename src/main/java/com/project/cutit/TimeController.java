@@ -1,11 +1,13 @@
 package com.project.cutit;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.SetChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
@@ -13,19 +15,18 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.controlsfx.control.RangeSlider;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.io.IOException;
 
-import static java.util.ResourceBundle.getBundle;
+public class TimeController extends Application {
 
-public class CutController extends Application {
     @FXML
-    private RangeSlider seekSlider;
+    private Slider speedSlider;
     @FXML
     private MediaView mediaView;
     @FXML
-    private Button CutIt;
+    private Label speedFactor;
     private MediaPlayer mediaPlayer;
 
     public static void main(String[] args) {
@@ -37,19 +38,22 @@ public class CutController extends Application {
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
             mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
-            seekSlider.setMax(media.getDuration().toMillis());
-            seekSlider.adjustHighValue(seekSlider.getMax());
-
             mediaView.setMediaPlayer(mediaPlayer);
-
-            seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
-            seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
         });
 
+        speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(
+                    ObservableValue<? extends Number> observableValue,
+                    Number oldValue,
+                    Number newValue) {
+                speedFactor.textProperty().setValue(
+                        String.valueOf(newValue.intValue()));
+            }
+        });
     }
 
     private final EventHandler<KeyEvent> keyListener = event -> {
-        System.out.println("hii");
         if(event.getCode() == KeyCode.SPACE) {
             Toggle();
         }
@@ -61,18 +65,16 @@ public class CutController extends Application {
         if(playing){
             mediaPlayer.pause();
         }else{
-            mediaPlayer.setStartTime(new Duration(seekSlider.getHighValue()));
-            mediaPlayer.setStopTime(new Duration(seekSlider.getHighValue()));
             mediaPlayer.play();
         }
 
     }
 
-    public void Cut() throws IOException {
-        Main.GenerateCutCommand(Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
-        //TODO:make it so that a window pops out
+    public void ChangeSpeed() throws IOException {
+        Main.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
     }
 
     @Override
-    public void start(Stage primaryStage) {}
+    public void start(Stage stage) throws Exception {
+    }
 }

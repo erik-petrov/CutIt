@@ -16,7 +16,7 @@
   </rowConstraints>
       <Button mnemonicParsing="false" onAction="#ToPlayer" text="%modules.button.player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
        <Button mnemonicParsing="false" onAction="#ToCut" text="%modules.button.cut" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-       <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+       <Button mnemonicParsing="false" onAction="#ToTime" text="%modules.button.time" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
        <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
        <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
        <Button mnemonicParsing="false" text="Button" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
