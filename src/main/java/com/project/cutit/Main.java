@@ -159,6 +159,8 @@ public class Main extends Application {
             factor = 1.0;
         }
 
+        Integer sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
+        Long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
         Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
         Integer audioChannels = data.getStreams().get(0).channels == 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
         String format = data.getFormat().format_name.split(",")[0]; //is mov cuz of [0], dunno if we'll change it
@@ -173,8 +175,8 @@ public class Main extends Application {
                 .addExtraArgs(extras)
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")
-                .setAudioSampleRate(data.getStreams().get(0).sample_rate)
-                .setAudioBitRate(data.getStreams().get(0).bit_rate)
+                .setAudioSampleRate(sampleRate)
+                .setAudioBitRate(bitRate)
 
                 .setVideoCodec("libx264")
                 .setVideoFrameRate(framerate, 1)
