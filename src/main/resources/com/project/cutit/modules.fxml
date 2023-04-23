@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.ModuleController">
    <children>
@@ -15,49 +15,33 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" userData="player" prefHeight="155.0" prefWidth="241.0" text="%modules.button.player" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" prefHeight="155.0" prefWidth="241.0" text="%modules.button.player" textAlignment="CENTER" userData="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" userData="cut" prefHeight="177.0" prefWidth="346.0" text="%modules.button.cut" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" prefHeight="177.0" prefWidth="346.0" text="%modules.button.cut" textAlignment="CENTER" userData="cut" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="141.0" userData="crop" prefWidth="209.0" text="%modules.button.crop" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="141.0" prefWidth="209.0" text="%modules.button.crop" textAlignment="CENTER" userData="crop" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="204.0" userData="" prefWidth="271.0" text="%modules.button.transitions" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" prefHeight="204.0" prefWidth="271.0" text="%modules.button.time" textAlignment="CENTER" userData="time" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="167.0" userData="" prefWidth="272.0" text="%modules.button.export" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" prefHeight="175.0" prefWidth="277.0" text="%modules.button.addText" textAlignment="CENTER" userData="addText" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" userData="" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-            <font>
-               <Font name="Arial" size="18.0" />
-            </font>
-         </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" userData="" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-            <font>
-               <Font name="Arial" size="18.0" />
-            </font>
-         </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="175.0" onAction="#ToModule" userData="addText" prefWidth="277.0" text="%modules.button.addText" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-            <font>
-               <Font name="Arial" size="18.0" />
-            </font>
-         </Button>
-             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="147.0" userData="" prefWidth="261.0" text="%modules.button.addAudio" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="147.0" prefWidth="261.0" text="%modules.button.addImage" textAlignment="CENTER" userData="" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <font>
                <Font name="Arial" size="18.0" />
             </font>

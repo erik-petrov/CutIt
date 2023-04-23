@@ -29,12 +29,9 @@ import static java.util.ResourceBundle.getBundle;
 public class Main extends Application {
     private static Media Media;
     private static Stage Stage;
-    private static FFmpeg FFmpeg;
-    private static FFprobe FFprobe;
-    private static String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
-
     public static FFmpeg FFmpeg;
     public static FFprobe FFprobe;
+    private static String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {

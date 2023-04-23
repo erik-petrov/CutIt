@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.media.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1199.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.TimeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1199.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.TimeController">
    <children>
       <MediaView fx:id="mediaView" fitHeight="550.0" fitWidth="1000.0" layoutX="100.0" layoutY="14.0" />
       <Slider fx:id="speedSlider" blockIncrement="1.0" layoutX="350.0" layoutY="586.0" max="10.0" min="-10.0" prefHeight="14.0" prefWidth="500.0" showTickLabels="true" value="-10.0" />
