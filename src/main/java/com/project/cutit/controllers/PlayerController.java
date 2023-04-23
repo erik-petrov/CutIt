@@ -1,5 +1,6 @@
-package com.project.cutit;
+package com.project.cutit.controllers;
 
+import com.project.cutit.Main;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,8 +17,6 @@ public class PlayerController {
     @FXML
     public MediaView mediaView;
     @FXML
-    public Pane playerPane;
-    @FXML
     public Button toggleButton;
     private MediaPlayer mediaPlayer;
 
@@ -25,12 +24,10 @@ public class PlayerController {
         Media media = Main.getMedia();
 
         mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> playerPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
+        mediaPlayer.setOnError(() -> System.out.println(mediaPlayer.getError()));
+        mediaView.setOnError((ar) -> System.out.println(ar));
+        mediaPlayer.setOnReady(() -> mediaView.addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
         mediaView.setMediaPlayer(mediaPlayer);
-
-        //mediaView.setPreserveRatio(true); //causes the video to break, please dont.
-
-        System.out.println(mediaView.getFitHeight());
 
     }
     private final EventHandler<KeyEvent> keyListener = event -> {

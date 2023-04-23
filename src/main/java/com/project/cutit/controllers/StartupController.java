@@ -1,5 +1,6 @@
-package com.project.cutit;
+package com.project.cutit.controllers;
 
+import com.project.cutit.Main;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
