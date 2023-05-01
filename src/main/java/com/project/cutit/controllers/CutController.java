@@ -1,5 +1,6 @@
-package com.project.cutit;
+package com.project.cutit.controllers;
 
+import com.project.cutit.Main;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,8 +25,6 @@ public class CutController extends Application {
     private RangeSlider seekSlider;
     @FXML
     private MediaView mediaView;
-    @FXML
-    private Button CutIt;
     private MediaPlayer mediaPlayer;
 
     public static void main(String[] args) {

@@ -5,7 +5,7 @@
 <?import javafx.scene.media.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1199.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.CutController">
+<AnchorPane prefHeight="720.0" prefWidth="1199.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.CutController">
    <children>
       <MediaView fx:id="mediaView" fitHeight="550.0" fitWidth="1000.0" layoutX="100.0" layoutY="14.0" />
       <RangeSlider fx:id="seekSlider" layoutX="170.0" layoutY="605.0" max="1.0" prefHeight="14.0" prefWidth="860.0" />

@@ -3,14 +3,12 @@ package com.project.cutit;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -33,23 +31,24 @@ import static java.util.ResourceBundle.getBundle;
 public class Main extends Application {
     private static Media Media;
     private static Stage Stage;
-    private static FFmpeg FFmpeg;
-    private static FFprobe FFprobe;
-    private static String temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
+    public static FFmpeg FFmpeg;
+    public static FFprobe FFprobe;
+    private static final String temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
 
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
         new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
-        fxmlLoader.setResources(getBundle(Main.class.getPackageName()+".translation", projectLocale));
+        fxmlLoader.setResources(getBundle("com.project.cutit.translation", projectLocale));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
         try{
-            FFmpeg = new FFmpeg("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
-            FFprobe = new FFprobe("C:\\Users\\erikp\\IdeaProjects\\CutIt\\src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+            FFmpeg = new FFmpeg("src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
+            FFprobe = new FFprobe("src\\main\\resources\\ffmpeg\\bin\\ffprobe.exe");
+
         }catch (Exception e){
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText("PLEASE INSTALL ffmpeg INTO resources FOLDER and rename the folder to 'ffmpeg'");
@@ -119,6 +118,9 @@ public class Main extends Application {
     public static void setLocale(String newLocale){
         projectLocale = Locale.forLanguageTag(newLocale);
     }
+
+    public static Locale getLocale(){ return projectLocale; }
+
     public static Media getMedia() {
         return Media;
     }
@@ -132,6 +134,8 @@ public class Main extends Application {
     public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
 
     public static String getDesktop() {return System.getProperty("user.home") + "/Desktop";}
+
+    public static String getAppDataFile() { return temporaryFilePath; }
 
     public static FFmpegProbeResult getMediaData(Media media) throws IOException {
         return FFprobe.probe(normalizePath(media.getSource()));

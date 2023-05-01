@@ -1,5 +1,6 @@
-package com.project.cutit;
+package com.project.cutit.controllers;
 
+import com.project.cutit.Main;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
