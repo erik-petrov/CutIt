@@ -72,14 +72,25 @@ public class AddTextController {
         event.consume();
     };
 
-    private boolean isValid(TextField field) {
-        return !field.getText().isEmpty();
+    public void Toggle(){
+        boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
+        if(playing){
+            mediaPlayer.pause();
+        }else{
+            mediaPlayer.play();
+        }
+
+    }
+
+    private boolean isInvalid(TextField field) {
+        return field.getText().isEmpty();
     }
     private void setAlert(TextInputControl field) {
         var rb = ResourceBundle.getBundle("com.project.cutit.translation", Main.getLocale());
 
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        //TODO translate
         alert.setContentText(String.format("%s field is empty", rb.getString("addText.control." + field.getId())));
         alert.show();
     }
@@ -97,7 +108,7 @@ public class AddTextController {
         }
 
         for (var field: fieldArray) {
-            if (!isValid(field)){
+            if (isInvalid(field)){
                 setAlert(field);
                 return;
             }
@@ -105,8 +116,6 @@ public class AddTextController {
 
 
         var videoFilter = String.format("drawtext=text='%s':fontsize=%s:fontcolor=%s:x=%s:y=%s%s", text.getText(), fontSize.getText(), fontColor.getValue().toString(),cordX.getText(),cordY.getText(), box);
-
-        System.out.println(videoFilter);
 
         var directory = mediaView.getMediaPlayer().getMedia().getSource();
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -117,15 +126,6 @@ public class AddTextController {
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         executor.createJob(builder).run();
     }
-    public void Toggle(){
-        boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
-        if(playing){
-            mediaPlayer.pause();
-        }else{
-            mediaPlayer.play();
-        }
-
-    }
 
     public void AddBoxClick(ActionEvent actionEvent) {
         boxOptions.setDisable( !((CheckBox)actionEvent.getSource()).isSelected() );
@@ -135,25 +135,4 @@ public class AddTextController {
         cordX.setText(String.valueOf(((int) mouseEvent.getX())));
         cordY.setText(String.valueOf((int) mouseEvent.getY()));
     }
-
-    /*public void FontFileSelect(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-
-        fileChooser.setTitle("Open File");
-
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
-
-        if (selectedFile != null) {
-            fontFile = selectedFile;
-            fontFileButton.setText(selectedFile.getName());
-            fontRemoveBtn.setDisable(false);
-        }
-    }
-    public void FontFileRemove(ActionEvent actionEvent) {
-        fontFile = null;
-        fontFileButton.setText("...");
-        fontRemoveBtn.setDisable(true);
-    }*/
 }
