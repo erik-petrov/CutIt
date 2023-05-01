@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -18,7 +17,6 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +40,8 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
         fxmlLoader.setResources(getBundle("com.project.cutit.translation", projectLocale));
         Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(getCss("style"));
+        scene.getStylesheets().add(getCss("startup"));
         stage.setTitle("CutIt Media player!");
         stage.setScene(scene);
         stage.show();
@@ -58,6 +58,12 @@ public class Main extends Application {
             }
         }
         Stage = stage;
+    }
+
+    private static String getCss(String styleFilename){
+        var filename = CheckFilename(styleFilename, ".css");
+        var styleResource = Main.class.getResource("/css/" + filename);
+        return styleResource != null ? styleResource.toExternalForm() : "";
     }
 
     public static void initiateProgressBar(Task<Void> task) throws IOException {
@@ -84,6 +90,12 @@ public class Main extends Application {
 
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(getCss("style"));
+            try{
+                scene.getStylesheets().add(getCss(filename.split("\\.")[0]));
+            }catch (Exception ignored){
+                System.out.println("Stylesheet missing");
+            }
 
             //Screen screen = Screen.getPrimary();
 
@@ -108,12 +120,16 @@ public class Main extends Application {
         }
 
     }
+
     public static String CheckFilename(String fxmlFile) {
-        var a = fxmlFile.split("(\\.)");
+        return CheckFilename(fxmlFile, ".fxml");
+    }
+    public static String CheckFilename(String file, String extension) {
+        var a = file.split("(\\.)");
         if (a.length == 1){
-            return fxmlFile + ".fxml";
+            return file + extension;
         }
-        return fxmlFile;
+        return file;
     }
     public static void setLocale(String newLocale){
         projectLocale = Locale.forLanguageTag(newLocale);

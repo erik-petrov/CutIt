@@ -1,0 +1,11 @@
+.button {
+    -fx-background-color: #F29602;
+    -fx-background-radius: 0;
+    -fx-font-size: 28;
+}
+.gridpane {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-hgap: 1px;
+    -fx-vgap: 1px;
+}

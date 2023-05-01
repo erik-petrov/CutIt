@@ -1,0 +1,50 @@
+/*
+BG = #14213D
+Button BG = #FCA311
+Text Color = #E5E5E5
+Border Color = Black
+*/
+.root {
+    -fx-background-color: #14213D;
+}
+
+.button {
+    -fx-background-color: #F29602;
+    -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+.menu-bar {
+    -fx-background-color: transparent;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+}
+
+.text {
+    -fx-text-fill: #E5E5E5;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+.label {
+    -fx-text-fill: #E5E5E5;
+}
+
+.slider .axis .axis-tick-label {
+    -fx-text-fill: black;
+}
+
+.check-box {
+    -fx-text-fill: #E5E5E5;
+}
+
+.color-picker {
+    -fx-color-label-visible: false;
+}
+
+.text-field, .text-area {
+    -fx-prompt-text-fill: darkgrey;
+}
