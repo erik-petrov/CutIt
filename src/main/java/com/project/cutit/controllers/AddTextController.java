@@ -12,14 +12,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.project.cutit.Main.FFmpeg;
 import static com.project.cutit.Main.FFprobe;
@@ -78,9 +76,11 @@ public class AddTextController {
         return !field.getText().isEmpty();
     }
     private void setAlert(TextInputControl field) {
+        var rb = ResourceBundle.getBundle("com.project.cutit.translation", Main.getLocale());
+
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setContentText(String.format("%s field is empty", field.getId()));
+        alert.setContentText(String.format("%s field is empty", rb.getString("addText.control." + field.getId())));
         alert.show();
     }
     public void AddTextToVideo() {
@@ -104,9 +104,6 @@ public class AddTextController {
         }
 
 
-
-
-
         var videoFilter = String.format("drawtext=text='%s':fontsize=%s:fontcolor=%s:x=%s:y=%s%s", text.getText(), fontSize.getText(), fontColor.getValue().toString(),cordX.getText(),cordY.getText(), box);
 
         System.out.println(videoFilter);
@@ -114,7 +111,7 @@ public class AddTextController {
         var directory = mediaView.getMediaPlayer().getMedia().getSource();
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Main.normalizePath(directory))
-                .addOutput("C:\\Users\\Calm\\IdeaProjects\\CutIt\\src\\main\\resources\\videos\\output.mp4")
+                .addOutput(Main.getAppDataFile())
                 .setVideoFilter(videoFilter)
                 .done();
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);

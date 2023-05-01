@@ -2,21 +2,18 @@ package com.project.cutit;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +28,7 @@ public class Main extends Application {
     private static Stage Stage;
     public static FFmpeg FFmpeg;
     public static FFprobe FFprobe;
-    private static String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
+    private static final String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
@@ -97,6 +94,7 @@ public class Main extends Application {
     public static void setLocale(String newLocale){
         projectLocale = Locale.forLanguageTag(newLocale);
     }
+    public static Locale getLocale(){ return projectLocale; }
     public static Media getMedia() {
         return Media;
     }
@@ -110,6 +108,8 @@ public class Main extends Application {
     public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
 
     public static String getDesktop() {return System.getProperty("user.home") + "/Desktop";}
+
+    public static String getAppDataFile() { return temporaryFilePath; }
 
     public static FFmpegProbeResult getMediaData(Media media) throws IOException {
         return FFprobe.probe(normalizePath(media.getSource()));

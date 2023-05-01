@@ -7,44 +7,44 @@
 
 <AnchorPane prefHeight="514.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.AddTextController">
    <children>
-       <Label alignment="CENTER" layoutX="378.0" layoutY="14.0" maxWidth="1.7976931348623157E308" prefHeight="56.0" prefWidth="243.0" text="Add text" textAlignment="CENTER">
+       <Label alignment="CENTER" layoutX="378.0" layoutY="14.0" maxWidth="1.7976931348623157E308" prefHeight="56.0" prefWidth="243.0" text="%addText.title" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="24.0" />
          </font></Label>
       <MediaView fx:id="mediaView" fitHeight="338.0" fitWidth="600.0" layoutX="378.0" layoutY="78.0" onMouseClicked="#mediaClick" />
-      <Button layoutX="274.0" layoutY="380.0" mnemonicParsing="false" onAction="#AddTextToVideo" prefHeight="56.0" prefWidth="85.0" text="Add">
+      <Button layoutX="274.0" layoutY="380.0" mnemonicParsing="false" onAction="#AddTextToVideo" prefHeight="56.0" prefWidth="85.0" text="%general.button.add">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <TextArea fx:id="text" layoutX="38.0" layoutY="189.0" prefHeight="81.0" prefWidth="319.0" />
-      <Label layoutX="272.0" layoutY="300.0" prefHeight="17.0" prefWidth="16.0" text="X" textAlignment="CENTER">
+      <TextArea fx:id="text" layoutX="38.0" layoutY="189.0" prefHeight="81.0" prefWidth="319.0" promptText="%addText.control.text" />
+      <Label layoutX="258.0" layoutY="300.0" prefHeight="17.0" prefWidth="16.0" text="X" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="cordY" layoutX="289.0" layoutY="329.0" prefHeight="25.0" prefWidth="71.0" />
-      <TextField fx:id="cordX" layoutX="289.0" layoutY="297.0" prefHeight="25.0" prefWidth="71.0" />
-      <Label layoutX="272.0" layoutY="333.0" prefHeight="17.0" prefWidth="16.0" text="Y" textAlignment="CENTER">
+      <TextField fx:id="cordY" alignment="CENTER" layoutX="275.0" layoutY="329.0" prefHeight="25.0" prefWidth="85.0" promptText="%addText.control.cordY" />
+      <TextField fx:id="cordX" alignment="CENTER" layoutX="275.0" layoutY="297.0" prefHeight="25.0" prefWidth="85.0" promptText="%addText.control.cordX" />
+      <Label layoutX="258.0" layoutY="332.0" prefHeight="17.0" prefWidth="16.0" text="Y" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
       <Pane fx:id="boxOptions" layoutX="34.0" layoutY="333.0" prefHeight="108.0" prefWidth="200.0">
          <children>
-            <Label layoutX="-1.0" layoutY="5.0" prefHeight="20.0" prefWidth="71.0" text="Box Color" textAlignment="CENTER">
+            <Label layoutX="-1.0" layoutY="5.0" prefHeight="20.0" prefWidth="71.0" text="%addText.control.boxColor" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ColorPicker fx:id="boxColor" layoutX="100.0" layoutY="3.0" prefHeight="25.0" prefWidth="99.0" />
+            <ColorPicker fx:id="boxColor" layoutX="85.0" layoutY="3.0" prefHeight="25.0" prefWidth="114.0" />
             <TextField fx:id="boxBorder" layoutX="150.0" layoutY="43.0" prefHeight="25.0" prefWidth="46.0" />
-            <Label layoutX="-1.0" layoutY="45.0" prefHeight="20.0" prefWidth="114.0" text="Border Thickness" textAlignment="CENTER">
+            <Label layoutX="-1.0" layoutY="45.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.boxBorder" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label layoutY="74.0" prefHeight="20.0" prefWidth="53.0" text="Opacity" textAlignment="CENTER">
+            <Label layoutY="74.0" prefHeight="20.0" prefWidth="53.0" text="%addText.control.boxOpacity" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -54,25 +54,25 @@
       <Pane layoutX="41.0" layoutY="87.0" prefHeight="81.0" prefWidth="185.0">
          <children>
             <TextField fx:id="fontSize" layoutX="133.0" prefHeight="14.0" prefWidth="46.0" />
-            <Label layoutY="3.0" prefHeight="20.0" prefWidth="64.0" text="Font Size" textAlignment="RIGHT">
+            <Label layoutY="3.0" prefHeight="20.0" prefWidth="64.0" text="%addText.control.fontSize" textAlignment="RIGHT">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label layoutY="34.0" prefHeight="20.0" prefWidth="71.0" text="Font Color" textAlignment="RIGHT">
+            <Label layoutY="34.0" prefHeight="20.0" prefWidth="71.0" text="%addText.control.fontColor" textAlignment="RIGHT">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
             <ColorPicker fx:id="fontColor" layoutX="87.0" layoutY="31.0" prefHeight="25.0" prefWidth="92.0" />
             <TextField fx:id="fontBorder" layoutX="133.0" layoutY="61.0" prefHeight="25.0" prefWidth="46.0" />
-            <Label layoutY="63.0" prefHeight="20.0" prefWidth="114.0" text="Font Border" textAlignment="CENTER">
+            <Label layoutY="63.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.fontBorder" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <CheckBox layoutX="34.0" layoutY="301.0" mnemonicParsing="false" onAction="#AddBoxClick" text="Add box?" />
+      <CheckBox layoutX="34.0" layoutY="301.0" mnemonicParsing="false" onAction="#AddBoxClick" text="%addText.control.addBox" />
    </children>
 </AnchorPane>
