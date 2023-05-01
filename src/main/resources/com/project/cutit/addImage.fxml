@@ -19,16 +19,13 @@
             <Font name="System Bold" size="14.0" />
         </font>
     </Label>
-    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0"
-               style="-fx-background-color: lightgrey;">
-        <Label fx:id="dragLabel" alignment="CENTER" prefHeight="133.0" prefWidth="276.0"
-               text="%addImage.control.dragLabel" textAlignment="CENTER" wrapText="true">
+    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0" style="-fx-background-color: lightgrey;">
+        <Label fx:id="dragLabel" alignment="CENTER" prefHeight="133.0" prefWidth="276.0" text="%addImage.control.dragLabel" textAlignment="CENTER" wrapText="true">
            <font>
-               <Font name="System Italic" size="18.0"/>
+               <Font name="System Italic" size="18.0" />
            </font>
         </Label>
-        <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="350.0" onDragDropped="#onDragDropped"
-                   onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true"/>
+        <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="350.0" onDragDropped="#onDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" />
     </StackPane>
     <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFileDialog" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
         <font>
@@ -40,13 +37,12 @@
          <Font name="System Bold" size="24.0" />
       </font>
    </Label>
-    <StackPane layoutX="378.0" layoutY="102.0" prefHeight="338.0" prefWidth="600.0"
-               style="-fx-background-color: lightgrey;">
-        <MediaView fx:id="mediaView" fitHeight="338.0" fitWidth="600.0" onMouseClicked="#mediaClick"/>
+    <StackPane layoutX="378.0" layoutY="102.0" prefHeight="338.0" prefWidth="600.0" style="-fx-background-color: lightgrey;">
+        <MediaView fx:id="mediaView" fitHeight="338.0" fitWidth="600.0" onMouseClicked="#mediaClick" />
     </StackPane>
    <Button layoutX="244.0" layoutY="446.0" mnemonicParsing="false" onAction="#AddImage" prefHeight="44.0" prefWidth="120.0" text="%general.button.add">
       <font>
-         <Font name="System Bold" size="14.0" />
+         <Font name="System Bold" size="18.0" />
       </font>
    </Button>
    <TextField fx:id="imageHeight" alignment="CENTER" layoutX="146.0" layoutY="417.0" prefHeight="25.0" prefWidth="85.0" promptText="%addImage.control.imageHeight" />
