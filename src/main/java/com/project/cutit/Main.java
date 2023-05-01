@@ -1,6 +1,7 @@
 package com.project.cutit;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,9 +12,13 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
+import net.bramp.ffmpeg.FFmpegUtils;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
+import net.bramp.ffmpeg.progress.Progress;
+import net.bramp.ffmpeg.progress.ProgressListener;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +31,14 @@ import static java.util.ResourceBundle.getBundle;
 public class Main extends Application {
     private static Media Media;
     private static Stage Stage;
-    public static FFmpeg FFmpeg;
-    public static FFprobe FFprobe;
-    private static final String temporaryFilePath = System.getenv("APPDATA")+"/temp.mp4";
+    private static FFmpeg FFmpeg;
+    private static FFprobe FFprobe;
+    private static String temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
+
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
+        new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
         fxmlLoader.setResources(getBundle("com.project.cutit.translation", projectLocale));
         Scene scene = new Scene(fxmlLoader.load());
@@ -52,6 +59,23 @@ public class Main extends Application {
         }
         Stage = stage;
     }
+
+    public static void initiateProgressBar(Task<Void> task) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
+        loader.setResources(getBundle(Main.class.getPackageName()+".translation", projectLocale));
+
+        Parent root = loader.load();
+
+        ProgressController cntrl = loader.getController();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        task.setOnSucceeded(event -> stage.close());
+        cntrl.activateProgressBar(task);
+        stage.setScene(scene);
+        stage.show();
+        new Thread(task).start();
+    }
+
     public static void switchScene(String fxmlFile) {
         var filename = CheckFilename(fxmlFile);
         try {
@@ -94,7 +118,9 @@ public class Main extends Application {
     public static void setLocale(String newLocale){
         projectLocale = Locale.forLanguageTag(newLocale);
     }
+
     public static Locale getLocale(){ return projectLocale; }
+
     public static Media getMedia() {
         return Media;
     }
@@ -116,14 +142,15 @@ public class Main extends Application {
     }
 
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(Stage);
+        /*DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(Stage);*/
 
         FFmpegProbeResult data = getMediaData(Media);
 
-        Integer audioChannels = data.getStreams().get(0).channels;
-        String format = data.getFormat().format_name;
+        Integer sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
+        Long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
         Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
+        Integer audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
         Long duration = (long)(to.doubleValue() - from.doubleValue());
 
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -134,8 +161,8 @@ public class Main extends Application {
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")        // using the aac codec
-                .setAudioSampleRate(data.getStreams().get(0).sample_rate)
-                .setAudioBitRate(data.getStreams().get(0).bit_rate)
+                .setAudioSampleRate(sampleRate)
+                .setAudioBitRate(bitRate)
 
                 .setVideoCodec("libx264")     // Video using x264
                 .setVideoFrameRate(framerate, 1)
@@ -146,7 +173,27 @@ public class Main extends Application {
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done(); // Allow FFmpeg to use experimental specs
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
-        executor.createJob(builder).run();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+                executor.createJob(builder, new ProgressListener() {
+                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
+                    @Override
+                    public void progress(Progress progress) {
+                        double percentage = progress.out_time_ns / duration_ns;
+
+                        Long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns)/progress.speed) : (long) duration_ns;
+
+                        updateProgress(percentage, 1.0);
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateTitle(String.valueOf(progress.status) == "continue" ? "Processing.." : "End");
+                    }
+                }).run();
+                return null ;
+            }
+        };
+        //task.setOnSucceeded(event -> pForm.getStage().close());
+        initiateProgressBar(task);
     }
     public static void GenerateSpeedCommand(Double factor) throws IOException {
         FFmpegProbeResult data = getMediaData(Media);
@@ -162,7 +209,7 @@ public class Main extends Application {
         Integer sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
         Long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
         Integer framerate = data.getStreams().get(0).avg_frame_rate.intValue();
-        Integer audioChannels = data.getStreams().get(0).channels == 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+        Integer audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
         String format = data.getFormat().format_name.split(",")[0]; //is mov cuz of [0], dunno if we'll change it
         String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
         String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
@@ -185,6 +232,36 @@ public class Main extends Application {
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
                 .setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
-        executor.createJob(builder).run();
+        Double finalFactor = factor;
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+                executor.createJob(builder, new ProgressListener() {
+                    final double duration_ns = (data.getFormat().duration * TimeUnit.SECONDS.toNanos(1)) / finalFactor;
+                    @Override
+                    public void progress(Progress progress) {
+                        double percentage = progress.out_time_ns / duration_ns;
+                        Long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns)/progress.speed) : (long) duration_ns;
+
+                        updateProgress(percentage, 1.0);
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateTitle(String.valueOf(progress.status));
+
+                        /*System.out.println(String.format(
+                                "[%.0f%%] status:%s frame:%d time:%s ms fps:%.0f speed:%.2fx",
+                                percentage * 100,
+                                progress.status,
+                                progress.frame,
+                                FFmpegUtils.toTimecode(progress.out_time_ns, TimeUnit.NANOSECONDS),
+                                progress.fps.doubleValue(),
+                                progress.speed
+                        ));*/
+                    }
+                }).run();
+                return null ;
+            }
+        };
+        //task.setOnSucceeded(event -> pForm.getStage().close());
+        initiateProgressBar(task);
     }
 }
