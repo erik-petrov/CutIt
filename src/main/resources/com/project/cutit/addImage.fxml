@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="514.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.AddImageController">
+    <Label layoutX="261.0" layoutY="383.0" prefHeight="17.0" prefWidth="16.0" text="X" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="14.0" />
+        </font>
+    </Label>
+    <TextField fx:id="cordY" alignment="CENTER" layoutX="278.0" layoutY="412.0" prefHeight="25.0" prefWidth="85.0" promptText="%addImage.control.cordY" />
+    <TextField fx:id="cordX" alignment="CENTER" layoutX="278.0" layoutY="380.0" prefHeight="25.0" prefWidth="85.0" promptText="%addImage.control.cordX" />
+    <Label layoutX="261.0" layoutY="415.0" prefHeight="17.0" prefWidth="16.0" text="Y" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="14.0" />
+        </font>
+    </Label>
+    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0"
+               style="-fx-background-color: lightgrey;">
+        <Label fx:id="dragLabel" alignment="CENTER" prefHeight="133.0" prefWidth="276.0"
+               text="%addImage.control.dragLabel" textAlignment="CENTER" wrapText="true">
+           <font>
+               <Font name="System Italic" size="18.0"/>
+           </font>
+        </Label>
+        <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="350.0" onDragDropped="#onDragDropped"
+                   onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true"/>
+    </StackPane>
+    <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFileDialog" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Button>
+   <Label alignment="CENTER" layoutX="362.0" layoutY="50.0" prefHeight="52.0" prefWidth="276.0" text="%addImage.title" textAlignment="CENTER">
+      <font>
+         <Font name="System Bold" size="24.0" />
+      </font>
+   </Label>
+    <StackPane layoutX="378.0" layoutY="102.0" prefHeight="338.0" prefWidth="600.0"
+               style="-fx-background-color: lightgrey;">
+        <MediaView fx:id="mediaView" fitHeight="338.0" fitWidth="600.0" onMouseClicked="#mediaClick"/>
+    </StackPane>
+   <Button layoutX="244.0" layoutY="446.0" mnemonicParsing="false" onAction="#AddImage" prefHeight="44.0" prefWidth="120.0" text="%general.button.add">
+      <font>
+         <Font name="System Bold" size="14.0" />
+      </font>
+   </Button>
+   <TextField fx:id="imageHeight" alignment="CENTER" layoutX="146.0" layoutY="417.0" prefHeight="25.0" prefWidth="85.0" promptText="%addImage.control.imageHeight" />
+   <TextField fx:id="imageWidth" alignment="CENTER" layoutX="146.0" layoutY="382.0" prefHeight="25.0" prefWidth="85.0" promptText="%addImage.control.imageWidth" />
+   <Label layoutX="36.0" layoutY="385.0" prefHeight="20.0" prefWidth="100.0" text="%addImage.control.imageWidth" textAlignment="CENTER">
+      <font>
+         <Font name="System Bold" size="14.0" />
+      </font>
+   </Label>
+   <Label layoutX="36.0" layoutY="417.0" prefHeight="17.0" prefWidth="100.0" text="%addImage.control.imageHeight" textAlignment="CENTER">
+      <font>
+         <Font name="System Bold" size="14.0" />
+      </font>
+   </Label>
+</AnchorPane>
