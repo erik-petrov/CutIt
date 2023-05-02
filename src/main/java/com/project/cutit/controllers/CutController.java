@@ -1,13 +1,10 @@
 package com.project.cutit.controllers;
 
+import com.project.cutit.FFmpegCommands;
+import com.project.cutit.Helper;
 import com.project.cutit.Main;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -18,14 +15,13 @@ import org.controlsfx.control.RangeSlider;
 
 import java.io.IOException;
 
-import static java.util.ResourceBundle.getBundle;
-
 public class CutController extends Application {
     @FXML
     private RangeSlider seekSlider;
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
+    private final Helper Helper = new Helper();
 
     public static void main(String[] args) {
         launch(args);
@@ -35,7 +31,7 @@ public class CutController extends Application {
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
             seekSlider.setMax(media.getDuration().toMillis());
             seekSlider.adjustHighValue(seekSlider.getMax());
 
@@ -44,16 +40,8 @@ public class CutController extends Application {
             seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
             seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
         });
-
+        Helper.setPlayer(mediaPlayer);
     }
-
-    private final EventHandler<KeyEvent> keyListener = event -> {
-        System.out.println("hii");
-        if(event.getCode() == KeyCode.SPACE) {
-            Toggle();
-        }
-        event.consume();
-    };
 
     public void Toggle(){
         boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
@@ -68,8 +56,7 @@ public class CutController extends Application {
     }
 
     public void Cut() throws IOException {
-        Main.GenerateCutCommand(Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
-        //TODO:make it so that a window pops out
+        FFmpegCommands.GenerateCutCommand(Double.valueOf(seekSlider.getLowValue()).intValue(), Double.valueOf(seekSlider.getHighValue()).intValue());
     }
 
     @Override

@@ -27,7 +27,7 @@
         </Label>
         <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="350.0" onDragDropped="#onDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" />
     </StackPane>
-    <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFileDialog" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
+    <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFile" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>

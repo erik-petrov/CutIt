@@ -20,6 +20,7 @@ public class StartupController {
 
     public void OnDragDropped(DragEvent dragEvent) {
         Dragboard dragboard = dragEvent.getDragboard();
+
         boolean success = false;
         if (dragboard.hasFiles()) {
             Media media = new Media(dragboard.getFiles().get(0).toURI().toString());

@@ -1,22 +1,17 @@
 package com.project.cutit.controllers;
 
+import com.project.cutit.FFmpegCommands;
+import com.project.cutit.Helper;
 import com.project.cutit.Main;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.SetChangeListener;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.io.IOException;
 
@@ -29,6 +24,7 @@ public class TimeController extends Application {
     @FXML
     private Label speedFactor;
     private MediaPlayer mediaPlayer;
+    private final Helper Helper = new Helper();
 
     public static void main(String[] args) {
         launch(args);
@@ -38,41 +34,16 @@ public class TimeController extends Application {
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
             mediaView.setMediaPlayer(mediaPlayer);
         });
 
-        speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(
-                    ObservableValue<? extends Number> observableValue,
-                    Number oldValue,
-                    Number newValue) {
-                speedFactor.textProperty().setValue(
-                        String.valueOf(newValue.intValue()));
-            }
-        });
-    }
-
-    private final EventHandler<KeyEvent> keyListener = event -> {
-        if(event.getCode() == KeyCode.SPACE) {
-            Toggle();
-        }
-        event.consume();
-    };
-
-    public void Toggle(){
-        boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
-        if(playing){
-            mediaPlayer.pause();
-        }else{
-            mediaPlayer.play();
-        }
-
+        speedSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> speedFactor.textProperty().setValue(
+                String.valueOf(newValue.intValue())));
     }
 
     public void ChangeSpeed() throws IOException {
-        Main.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
+        FFmpegCommands.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
     }
 
     @Override
