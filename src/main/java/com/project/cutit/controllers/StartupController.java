@@ -47,11 +47,14 @@ public class StartupController {
 
         FileChooser fileChooser = new FileChooser();
 
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select your video", "*.mp4", "*.wav","*.avi","*.mov","*.mkv","*.m4v");
+        fileChooser.getExtensionFilters().add(filter);
+
         // Set the title of the file chooser dialog
         fileChooser.setTitle("Open File");
 
         // Set the initial directory of the file chooser
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+"/Desktop/"));
 
         // Show the file chooser dialog and get the selected file
         File selectedFile = fileChooser.showOpenDialog(openButton.getScene().getWindow());

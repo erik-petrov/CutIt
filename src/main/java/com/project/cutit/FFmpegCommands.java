@@ -28,15 +28,16 @@ public class FFmpegCommands {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
         loader.setResources(getBundle(Main.class.getPackageName()+".translation", Main.getLocale()));
 
-        //important - change media to temp, so we change the edited video once again
-        Main.setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
-
         Parent root = loader.load();
 
         ProgressController cntrl = loader.getController();
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        task.setOnSucceeded(event -> stage.close());
+        //important - change media to temp, so we change the edited video once again
+        task.setOnSucceeded(event -> {
+            Main.setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
+            stage.close();
+        });
         cntrl.activateProgressBar(task);
         stage.setScene(scene);
         stage.show();
@@ -50,11 +51,21 @@ public class FFmpegCommands {
         File imageFile = new File(imagePath);
         FFmpegProbeResult data = getMediaData();
 
+        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
+        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
+        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
+        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
                 .addInput(FFprobe.probe(imageFile.getAbsolutePath()))
                 .addExtraArgs("-filter_complex", filter)
                 .addOutput(Main.getAppDataFile())
+                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioCodec("aac")
+                .setAudioSampleRate(sampleRate)
+                .setVideoFrameRate(framerate, 1)
+                .setAudioBitRate(bitRate)
                 .done();
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         Task<Void> task = new Task<>() {
@@ -106,12 +117,25 @@ public class FFmpegCommands {
     }
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
+        FFmpegProbeResult data = getMediaData();
+
+        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
+        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
+        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
+        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
                 .overrideOutputFiles(true)
                 .addOutput(temporaryFilePath)
-                .setVideoCodec("libx264")
+
+                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioCodec("aac")        // using the aac codec
+                .setAudioSampleRate(sampleRate)
+                .setAudioBitRate(bitRate)
+                .setVideoCodec("libx264")     // Video using x264
+                .setVideoFrameRate(framerate, 1)
+
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
                 .setDuration(duration, TimeUnit.MILLISECONDS)
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done();
@@ -127,6 +151,7 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        //TODO: TRNSALTE
                         updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
                     }
                 }).run();
@@ -146,15 +171,27 @@ public class FFmpegCommands {
             factor = 1.0;
         }
 
+        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
+        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
+        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
+        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
         String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
         String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
-                .overrideOutputFiles(true)
-                .addOutput(temporaryFilePath)
+                .setInput(Helper.normalizePath(Main.getMedia().getSource()))     // Filename, or a FFmpegProbeResult
+                .overrideOutputFiles(true) // Override the output if it exists
+
+                .addOutput(temporaryFilePath)   // Filename for the destination
                 .addExtraArgs(extras)
+                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioCodec("aac")
+                .setAudioSampleRate(sampleRate)
+                .setAudioBitRate(bitRate)
+
                 .setVideoCodec("libx264")
+                .setVideoFrameRate(framerate, 1)
+
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
                 .setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);

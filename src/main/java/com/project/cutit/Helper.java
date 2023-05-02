@@ -61,7 +61,7 @@ public class Helper {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+"/Desktop/"));
 
         return fileChooser.showOpenDialog(openButton.getScene().getWindow());
     }
