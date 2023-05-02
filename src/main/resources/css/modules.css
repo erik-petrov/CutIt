@@ -3,6 +3,10 @@
     -fx-background-radius: 0;
     -fx-font-size: 28;
 }
+.button:hover{
+    -fx-background-color: #b87600;
+    transition: -fx-background-color 1s;
+}
 .gridpane {
     -fx-border-color: black;
     -fx-border-width: 2px;
