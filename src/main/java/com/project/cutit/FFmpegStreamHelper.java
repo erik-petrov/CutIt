@@ -13,6 +13,8 @@ public class FFmpegStreamHelper {
     public static int frameRate;
     public static int audioChannels;
     public static double duration;
+    public static String videoCodec;
+    public static String audioCodec;
 
     public FFmpegStreamHelper(){}
 
@@ -34,10 +36,13 @@ public class FFmpegStreamHelper {
             }
         }
 
+
         sampleRate = audioStream.sample_rate > 0 ? audioStream.sample_rate : 48_000;
         bitRate = videoStream.bit_rate > 0 ? videoStream.bit_rate : 32768;
         frameRate = videoStream.avg_frame_rate.intValue();
         audioChannels = audioStream.channels <= 0 ? 1 : audioStream.channels;
         duration = videoStream.duration;
+        audioCodec = audioStream.codec_name;
+        videoCodec = videoStream.codec_name;
     }
 }

@@ -55,7 +55,7 @@ public class FFmpegCommands {
                 .addExtraArgs("-filter_complex", filter)
                 .addOutput(Main.getAppDataFile())
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
-                .setAudioCodec("aac")
+                .setAudioCodec(audioCodec)
                 .setAudioSampleRate(sampleRate)
                 .setVideoFrameRate(frameRate, 1)
                 .setAudioBitRate(bitRate)
@@ -118,15 +118,16 @@ public class FFmpegCommands {
                 .addOutput(temporaryFilePath)
 
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
-                .setAudioCodec("aac")        // using the aac codec
+                .setAudioCodec(audioCodec)        // using the aac codec
                 .setAudioSampleRate(sampleRate)
                 .setAudioBitRate(bitRate)
-                .setVideoCodec("libx264")     // Video using x264
+                .setVideoCodec(videoCodec)     // Video using x264
                 .setVideoFrameRate(frameRate, 1)
 
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
                 .setDuration(duration, TimeUnit.MILLISECONDS)
-                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done();
+                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
+                .done();
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         Task<Void> task = new Task<>() {
             @Override
@@ -169,16 +170,17 @@ public class FFmpegCommands {
 
                 .addOutput(temporaryFilePath)   // Filename for the destination
                 .addExtraArgs(extras)
+
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
-                .setAudioCodec("aac")
+                .setAudioCodec(audioCodec)
                 .setAudioSampleRate(sampleRate)
                 .setAudioBitRate(bitRate)
 
-                .setVideoCodec("libx264")
+                .setVideoCodec(videoCodec)
                 .setVideoFrameRate(frameRate, 1)
 
-                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
-                .setComplexFilter(filter);
+                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
+                .done().setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         Double finalFactor = factor;
         Task<Void> task = new Task<>() {
