@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFmpegUtils;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
 
@@ -18,12 +17,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static com.project.cutit.FFmpegStreamHelper.*;
 import static com.project.cutit.Main.FFmpeg;
 import static com.project.cutit.Main.FFprobe;
 import static java.util.ResourceBundle.getBundle;
 
 public class FFmpegCommands {
     private static final String temporaryFilePath = Main.getAppDataFile();
+    private static final FFmpegStreamHelper streamHelper = new FFmpegStreamHelper();
     public static void initiateProgressBar(Task<Void> task) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
         loader.setResources(getBundle(Main.class.getPackageName()+".translation", Main.getLocale()));
@@ -43,18 +44,10 @@ public class FFmpegCommands {
         stage.show();
         new Thread(task).start();
     }
-    public static FFmpegProbeResult getMediaData() throws IOException {
-        return FFprobe.probe(Helper.normalizePath(Main.getMedia().getSource()));
-    }
 
     public static void GenerateImageCommand(String imagePath, String filter) throws IOException {
         File imageFile = new File(imagePath);
-        FFmpegProbeResult data = getMediaData();
-
-        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
-        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
-        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
-        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+        streamHelper.setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
@@ -64,7 +57,7 @@ public class FFmpegCommands {
                 .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
                 .setAudioCodec("aac")
                 .setAudioSampleRate(sampleRate)
-                .setVideoFrameRate(framerate, 1)
+                .setVideoFrameRate(frameRate, 1)
                 .setAudioBitRate(bitRate)
                 .done();
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
@@ -72,7 +65,7 @@ public class FFmpegCommands {
             @Override
             public Void call(){
                 executor.createJob(builder, new ProgressListener() {
-                    final double duration_ns = data.getFormat().duration * TimeUnit.MILLISECONDS.toNanos(1);
+                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
@@ -88,7 +81,7 @@ public class FFmpegCommands {
         initiateProgressBar(task);
     }
     public static void GenerateTextCommand(String filter) throws IOException {
-        FFmpegProbeResult data = getMediaData();
+        streamHelper.setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
@@ -100,7 +93,7 @@ public class FFmpegCommands {
             @Override
             public Void call(){
                 executor.createJob(builder, new ProgressListener() {
-                    final double duration_ns = data.getFormat().duration * TimeUnit.MILLISECONDS.toNanos(1);
+                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
@@ -117,12 +110,7 @@ public class FFmpegCommands {
     }
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
-        FFmpegProbeResult data = getMediaData();
-
-        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
-        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
-        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
-        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+        streamHelper.setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
@@ -134,7 +122,7 @@ public class FFmpegCommands {
                 .setAudioSampleRate(sampleRate)
                 .setAudioBitRate(bitRate)
                 .setVideoCodec("libx264")     // Video using x264
-                .setVideoFrameRate(framerate, 1)
+                .setVideoFrameRate(frameRate, 1)
 
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
                 .setDuration(duration, TimeUnit.MILLISECONDS)
@@ -161,7 +149,7 @@ public class FFmpegCommands {
         initiateProgressBar(task);
     }
     public static void GenerateSpeedCommand(Double factor) throws IOException {
-        FFmpegProbeResult data = getMediaData();
+        streamHelper.setStreamData();
 
         if(factor < 0){
             factor = 1/Math.abs(factor);
@@ -171,10 +159,7 @@ public class FFmpegCommands {
             factor = 1.0;
         }
 
-        int sampleRate = data.getStreams().get(0).sample_rate > 0 ? data.getStreams().get(0).sample_rate : 48_000;
-        long bitRate = data.getStreams().get(0).bit_rate > 0 ? data.getStreams().get(0).bit_rate : 32768;
-        int framerate = data.getStreams().get(0).avg_frame_rate.intValue();
-        int audioChannels = data.getStreams().get(0).channels <= 0 ? 1 : data.getStreams().get(0).channels; //if is 0 then 1
+
         String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
         String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
 
@@ -190,7 +175,7 @@ public class FFmpegCommands {
                 .setAudioBitRate(bitRate)
 
                 .setVideoCodec("libx264")
-                .setVideoFrameRate(framerate, 1)
+                .setVideoFrameRate(frameRate, 1)
 
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL).done()
                 .setComplexFilter(filter);
@@ -200,7 +185,7 @@ public class FFmpegCommands {
             @Override
             public Void call() {
                 executor.createJob(builder, new ProgressListener() {
-                    final double duration_ns = (data.getFormat().duration * TimeUnit.SECONDS.toNanos(1)) / finalFactor;
+                    final double duration_ns = (duration * TimeUnit.SECONDS.toNanos(1)) / finalFactor;
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
