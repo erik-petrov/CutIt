@@ -43,7 +43,19 @@ public class TimeController extends Application {
     }
 
     public void ChangeSpeed() throws IOException {
-        FFmpegCommands.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
+        double factor = Math.floor(speedSlider.getValue());
+        if(factor < 0){
+            factor = 1/Math.abs(factor);
+        }
+
+        if(factor == 0){
+            factor = 1.0;
+        }
+
+        String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
+        String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
+
+        FFmpegCommands.GenerateSpeedCommand(factor, extras, filter);
     }
 
     @Override
