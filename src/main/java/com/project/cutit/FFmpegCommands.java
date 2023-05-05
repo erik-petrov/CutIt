@@ -15,16 +15,27 @@ import net.bramp.ffmpeg.progress.ProgressListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static com.project.cutit.FFmpegStreamHelper.*;
-import static com.project.cutit.Main.FFmpeg;
-import static com.project.cutit.Main.FFprobe;
+import static com.project.cutit.Main.*;
 import static java.util.ResourceBundle.getBundle;
 
 public class FFmpegCommands {
-    private static final String temporaryFilePath = Main.getAppDataFile();
-    private static final FFmpegStreamHelper streamHelper = new FFmpegStreamHelper();
+    private static String temporaryFilePath = Main.getAppDataFile();
+    private static void updateTempFilePath(){ temporaryFilePath = Main.getAppDataFile(); }
+    public static String genName() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 8) {
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+    }
     public static void initiateProgressBar(Task<Void> task) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
         loader.setResources(getBundle(Main.class.getPackageName()+".translation", Main.getLocale()));
@@ -36,7 +47,9 @@ public class FFmpegCommands {
         Stage stage = new Stage();
         //important - change media to temp, so we change the edited video once again
         task.setOnSucceeded(event -> {
-            Main.setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
+            setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
+            updateMediaName(genName());
+            updateTempFilePath();
             stage.close();
         });
         cntrl.activateProgressBar(task);
@@ -47,7 +60,7 @@ public class FFmpegCommands {
 
     public static void GenerateImageCommand(String imagePath, String filter) throws IOException {
         File imageFile = new File(imagePath);
-        streamHelper.setStreamData();
+        setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
@@ -81,7 +94,7 @@ public class FFmpegCommands {
         initiateProgressBar(task);
     }
     public static void GenerateTextCommand(String filter) throws IOException {
-        streamHelper.setStreamData();
+        setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))
@@ -110,10 +123,11 @@ public class FFmpegCommands {
     }
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
-        streamHelper.setStreamData();
+        setStreamData();
+        String inputPath = Helper.normalizePath(Main.getMedia().getSource());
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
+                .setInput(inputPath)
                 .overrideOutputFiles(true)
                 .addOutput(temporaryFilePath)
 
@@ -150,7 +164,7 @@ public class FFmpegCommands {
         initiateProgressBar(task);
     }
     public static void GenerateSpeedCommand(Double factor, String[] extras, String filter) throws IOException {
-        streamHelper.setStreamData();
+        setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(Helper.normalizePath(Main.getMedia().getSource()))     // Filename, or a FFmpegProbeResult
