@@ -1,5 +1,6 @@
 package com.project.cutit;
 
+import com.project.cutit.helpers.I18n_Helper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,23 +13,17 @@ import net.bramp.ffmpeg.FFprobe;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
-
-import static java.util.ResourceBundle.getBundle;
 
 public class Main extends Application {
     private static Media Media;
     public static FFmpeg FFmpeg;
     public static FFprobe FFprobe;
     private static String temporaryFilePath;
-
-    private static Locale projectLocale = Locale.forLanguageTag("en-GB");
-
     public void start(Stage stage) throws IOException {
         temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
         new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
-        fxmlLoader.setResources(getBundle("com.project.cutit.translation", projectLocale));
+        fxmlLoader.setResources(I18n_Helper.getTranslationBundle());
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(getCss("style"));
         scene.getStylesheets().add(getCss("startup"));
@@ -41,7 +36,7 @@ public class Main extends Application {
 
         }catch (Exception e){
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText("PLEASE INSTALL ffmpeg INTO resources FOLDER and rename the folder to 'ffmpeg'");
+            a.setContentText(I18n_Helper.getTranslation("error.ffmpegFolder"));
             a.showAndWait();
             System.exit(0);
         }
@@ -57,7 +52,7 @@ public class Main extends Application {
         var filename = CheckFilename(fxmlFile);
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
-            loader.setResources(getBundle(Main.class.getPackageName()+".translation", projectLocale));
+            loader.setResources(I18n_Helper.getTranslationBundle());
 
             Parent root = loader.load();
             Scene scene = new Scene(root);
@@ -70,11 +65,12 @@ public class Main extends Application {
 
             Stage stage = new Stage();
 
+            stage.setResizable(false);
             stage.setScene(scene);
+
             if(!fxmlFile.equals("modules")){
                 stage.showAndWait();
-            }
-            else{
+            } else {
                 stage.show();
             }
         } catch (Exception exception) {
@@ -93,18 +89,12 @@ public class Main extends Application {
         }
         return file;
     }
-    public static void setLocale(String newLocale){
-        projectLocale = Locale.forLanguageTag(newLocale);
-    }
-
-    public static Locale getLocale(){ return projectLocale; }
-
     public static Media getMedia() { return Media; }
 
     public static void setMedia(Media newValue) { Media = newValue; }
 
     public static String getAppDataFile() { return temporaryFilePath; }
-    public static void updateMediaName(String name) { temporaryFilePath = System.getenv("APPDATA")+"/CutIt/"+name+".mp4"; }
+    public static void updateMediaName(String name) { temporaryFilePath = System.getenv("APPDATA") + "/CutIt/" + name + ".mp4"; }
 
     public static void main(String[] args) { launch(args); }
 }

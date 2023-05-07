@@ -1,6 +1,8 @@
 package com.project.cutit;
 
 import com.project.cutit.controllers.ProgressController;
+import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.I18n_Helper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,33 +20,34 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static com.project.cutit.FFmpegStreamHelper.*;
 import static com.project.cutit.Main.*;
-import static java.util.ResourceBundle.getBundle;
+import static com.project.cutit.helpers.FFmpegStreamHelper.*;
 
 public class FFmpegCommands {
     private static String temporaryFilePath = Main.getAppDataFile();
-    private static void updateTempFilePath(){ temporaryFilePath = Main.getAppDataFile(); }
+    private static void updateTempFilePath() { temporaryFilePath = Main.getAppDataFile(); }
     public static String genName() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
+
         Random rnd = new Random();
         while (salt.length() < 8) {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+
+        return salt.toString();
     }
     public static void initiateProgressBar(Task<Void> task) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
-        loader.setResources(getBundle(Main.class.getPackageName()+".translation", Main.getLocale()));
+        loader.setResources(I18n_Helper.getTranslationBundle());
 
         Parent root = loader.load();
-
         ProgressController cntrl = loader.getController();
+
         Scene scene = new Scene(root);
         Stage stage = new Stage();
+
         //important - change media to temp, so we change the edited video once again
         task.setOnSucceeded(event -> {
             setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
@@ -52,6 +55,7 @@ public class FFmpegCommands {
             updateTempFilePath();
             stage.close();
         });
+
         cntrl.activateProgressBar(task);
         stage.setScene(scene);
         stage.show();
@@ -73,6 +77,7 @@ public class FFmpegCommands {
                 .setVideoFrameRate(frameRate, 1)
                 .setAudioBitRate(bitRate)
                 .done();
+
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         Task<Void> task = new Task<>() {
             @Override
@@ -85,7 +90,9 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                        updateTitle(String.valueOf(progress.status).equals("continue")
+                                ? I18n_Helper.getTranslation("progressBar.progress")
+                                : I18n_Helper.getTranslation("progressBar.end"));
                     }
                 }).run();
                 return null;
@@ -113,9 +120,12 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                        updateTitle(String.valueOf(progress.status).equals("continue")
+                                ? I18n_Helper.getTranslation("progressBar.progress")
+                                : I18n_Helper.getTranslation("progressBar.end"));
                     }
                 }).run();
+
                 return null;
             }
         };
@@ -154,10 +164,12 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        //TODO: TRNSALTE
-                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                        updateTitle(String.valueOf(progress.status).equals("continue")
+                                ? I18n_Helper.getTranslation("progressBar.progress")
+                                : I18n_Helper.getTranslation("progressBar.end"));
                     }
                 }).run();
+
                 return null;
             }
         };
@@ -184,21 +196,23 @@ public class FFmpegCommands {
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
                 .done().setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
-        Double finalFactor = factor;
         Task<Void> task = new Task<>() {
             @Override
             public Void call() {
                 executor.createJob(builder, new ProgressListener() {
-                    final double duration_ns = (duration * TimeUnit.SECONDS.toNanos(1)) / finalFactor;
+                    final double duration_ns = (duration * TimeUnit.SECONDS.toNanos(1)) / factor;
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        updateTitle(String.valueOf(progress.status));
+                        updateTitle(String.valueOf(progress.status).equals("continue")
+                                ? I18n_Helper.getTranslation("progressBar.progress")
+                                : I18n_Helper.getTranslation("progressBar.end"));
                     }
                 }).run();
+
                 return null;
             }
         };

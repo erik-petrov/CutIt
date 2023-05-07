@@ -1,13 +1,12 @@
 package com.project.cutit.controllers;
 
-import javafx.application.Application;
+import com.project.cutit.helpers.MenuBarHelper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.stage.Stage;
 
-public class ProgressController extends Application {
+public class ProgressController extends MenuBarHelper {
     @FXML
     private ProgressBar progressBar = new ProgressBar();
     @FXML
@@ -24,10 +23,5 @@ public class ProgressController extends Application {
         progressBar.progressProperty().bind(task.progressProperty());
         timeLeft.textProperty().bind(task.messageProperty());
         status.textProperty().bind(task.titleProperty());
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
     }
 }

@@ -6,81 +6,131 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.ModuleController">
-    <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
-      <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      </columnConstraints>
-      <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      </rowConstraints>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="player" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/play.png"/>
-                </ImageView>
-            </graphic>
+    <StackPane>
+        <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
+            <Menu mnemonicParsing="false" text="%menubar.file.title">
+                <CheckMenuItem mnemonicParsing="false" text="%menubar.file.keepMenu" onAction="#KeepOpen" />
+                <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" />
+                <MenuItem mnemonicParsing="false" text="%menubar.file.exit" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="%menubar.language.title">
+                <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
+                <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="%menubar.module.title">
+                <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" />
+                <MenuItem mnemonicParsing="false" text="%menubar.module.addText" userData="addText" />
+                <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" />
+                <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" />
+                <MenuItem mnemonicParsing="false" text="%menubar.module.time" userData="time" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="%menubar.help.title">
+                <MenuItem mnemonicParsing="false" text="%menubar.help.about" />
+            </Menu>
+        </MenuBar>
+        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                  prefHeight="400.0" prefWidth="600.0">
 
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="cut" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/trim.png"/>
-                </ImageView>
-            </graphic>
-            <tooltip><Tooltip text="%modules.button.cut" /></tooltip>
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" textAlignment="CENTER" userData="crop" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/crop.png"/>
-                </ImageView>
-            </graphic>
-            <tooltip><Tooltip text="%modules.button.crop" /></tooltip>
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="time" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/playback.png"/>
-                </ImageView>
-            </graphic>
-            <tooltip><Tooltip text="%modules.button.time" /></tooltip>
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="addText" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/textIcon.png"/>
-                </ImageView>
-            </graphic>
-            <tooltip><Tooltip text="%modules.button.addText" /></tooltip>
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="addImage" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-            <graphic>
-                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../icons/imageIcon.png"/>
-                </ImageView>
-            </graphic>
-            <tooltip><Tooltip text="%modules.button.addImage" /></tooltip>
-            <font>
-              <Font name="Arial" size="24.0" />
-          </font>
-        </Button>
-    </GridPane>
+          <columnConstraints>
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+          </columnConstraints>
+          <rowConstraints>
+              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+          </rowConstraints>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#ToModule" textAlignment="CENTER" userData="player" wrapText="true"
+                    GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/play.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.player"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#ToModule" textAlignment="CENTER" userData="cut" wrapText="true" GridPane.columnIndex="1"
+                    GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/trim.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.cut"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    styleClass="alternative-button" textAlignment="CENTER" userData="crop" wrapText="true"
+                    GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/crop.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.crop"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#ToModule" styleClass="alternative-button" textAlignment="CENTER" userData="time"
+                    wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                    GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/playback.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.time"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#ToModule" styleClass="alternative-button" textAlignment="CENTER" userData="addText"
+                    wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/textIcon.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.addText"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#ToModule" textAlignment="CENTER" userData="addImage" wrapText="true"
+                    GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../../icons/imageIcon.png"/>
+                    </ImageView>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="%modules.buttonTooltip.addImage"/>
+                </tooltip>
+                <font>
+                  <Font name="Arial" size="24.0"/>
+              </font>
+            </Button>
+        </GridPane>
+    </StackPane>
 </AnchorPane>

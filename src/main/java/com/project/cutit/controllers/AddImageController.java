@@ -1,8 +1,9 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.Helper;
+import com.project.cutit.helpers.Helper;
 import com.project.cutit.Main;
+import com.project.cutit.helpers.MenuBarHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddImageController {
+public class AddImageController extends MenuBarHelper {
     @FXML
     public ImageView imageView;
     @FXML
@@ -45,8 +46,9 @@ public class AddImageController {
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        cordX.setText(String.valueOf(((int) mouseEvent.getX())));
-        cordY.setText(String.valueOf((int) mouseEvent.getY()));
+        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
+        cordX.setText(String.valueOf((coords[0])));
+        cordY.setText(String.valueOf(coords[1]));
     }
 
     public void OpenFile(ActionEvent ev){
@@ -71,7 +73,7 @@ public class AddImageController {
         dragEvent.consume();
     }
 
-    public void OnDragOver(DragEvent dragEvent){
+    public void OnDragOver(DragEvent dragEvent) {
         Helper.OnDragOver(dragEvent);
     }
 

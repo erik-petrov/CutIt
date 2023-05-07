@@ -3,10 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="105.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.ProgressController">
-   <children>
-      <ProgressBar fx:id="progressBar" layoutX="15.0" layoutY="48.0" prefHeight="18.0" prefWidth="247.0" progress="0.0" />
-      <Label fx:id="timeLeft" layoutX="14.0" layoutY="74.0" text="%progress.timeLeft" />
-      <Label fx:id="status" layoutX="16.0" layoutY="14.0" text="%progress.title" />
-   </children>
+<AnchorPane prefHeight="105.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.ProgressController">
+   <ProgressBar fx:id="progressBar" layoutX="15.0" layoutY="48.0" prefHeight="18.0" prefWidth="247.0" progress="0.0"/>
+   <Label fx:id="timeLeft" layoutX="14.0" layoutY="74.0" text="%progressBar.timeLeft"/>
+   <Label fx:id="status" layoutX="16.0" layoutY="14.0" text="%progressBar.start"/>
 </AnchorPane>

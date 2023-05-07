@@ -1,5 +1,6 @@
-package com.project.cutit;
+package com.project.cutit.helpers;
 
+import com.project.cutit.Main;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.probe.FFmpegStream;
 
@@ -12,6 +13,7 @@ public class FFmpegStreamHelper {
     public static long bitRate;
     public static int frameRate;
     public static int audioChannels;
+
     public static double duration;
     public static String videoCodec;
     public static String audioCodec;

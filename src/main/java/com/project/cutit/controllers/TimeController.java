@@ -1,22 +1,23 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.Helper;
+import com.project.cutit.helpers.Helper;
 import com.project.cutit.Main;
-import javafx.application.Application;
+import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class TimeController extends Application {
-
+public class TimeController extends MenuBarHelper {
+    @FXML
+    public Button timeButton;
     @FXML
     private Slider speedSlider;
     @FXML
@@ -26,13 +27,11 @@ public class TimeController extends Application {
     private MediaPlayer mediaPlayer;
     private final Helper Helper = new Helper();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     public void initialize() {
+
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
+        Helper.setPlayer(mediaPlayer);
         mediaPlayer.setOnReady(() -> {
             mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
             mediaView.setMediaPlayer(mediaPlayer);
@@ -56,9 +55,5 @@ public class TimeController extends Application {
         String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
 
         FFmpegCommands.GenerateSpeedCommand(factor, extras, filter);
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
     }
 }
