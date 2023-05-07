@@ -20,11 +20,12 @@ public class Main extends Application {
     private static Media Media;
     public static FFmpeg FFmpeg;
     public static FFprobe FFprobe;
-    private static final String temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
+    private static String temporaryFilePath;
 
     private static Locale projectLocale = Locale.forLanguageTag("en-GB");
 
     public void start(Stage stage) throws IOException {
+        temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
         new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
         fxmlLoader.setResources(getBundle("com.project.cutit.translation", projectLocale));
@@ -103,6 +104,7 @@ public class Main extends Application {
     public static void setMedia(Media newValue) { Media = newValue; }
 
     public static String getAppDataFile() { return temporaryFilePath; }
+    public static void updateMediaName(String name) { temporaryFilePath = System.getenv("APPDATA")+"/CutIt/"+name+".mp4"; }
 
     public static void main(String[] args) { launch(args); }
 }
