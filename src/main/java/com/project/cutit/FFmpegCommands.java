@@ -204,4 +204,33 @@ public class FFmpegCommands {
         };
         initiateProgressBar(task);
     }
+    public static void GenerateCropCommand(String filter) throws IOException {
+        setStreamData();
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
+                .overrideOutputFiles(true)
+                .addOutput(Main.getAppDataFile())
+                .addExtraArgs("-filter:v",filter)
+                .done();
+        FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
+        Task<Void> task = new Task<>() {
+            @Override
+            public Void call(){
+                executor.createJob(builder, new ProgressListener() {
+                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
+                    @Override
+                    public void progress(Progress progress) {
+                        double percentage = progress.out_time_ns / duration_ns;
+                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
+                        updateProgress(percentage, 1.0);
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                    }
+                }).run();
+                return null;
+            }
+        };
+        initiateProgressBar(task);
+    }
 }

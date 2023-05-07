@@ -29,8 +29,6 @@ public class CropController {
     private TextField y;
     @FXML
     private MediaView mediaView;
-    @FXML
-    private Pane mediaViewPane;
     private MediaPlayer mediaPlayer;
     private final Helper Helper = new Helper();
     public void initialize(){
