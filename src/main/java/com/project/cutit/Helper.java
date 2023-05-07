@@ -84,4 +84,12 @@ public class Helper {
             _mediaPlayer.play();
         }
     }
+    public boolean CheckValues(String ... args){
+        for (String arg : args) {
+            if(arg.isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
 }
