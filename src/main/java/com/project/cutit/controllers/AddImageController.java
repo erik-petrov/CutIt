@@ -1,7 +1,7 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.Main;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.event.ActionEvent;
@@ -29,30 +29,30 @@ public class AddImageController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final Helper Helper = new Helper();
+    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
         TextField[] fieldArray = {cordX, cordY, imageHeight, imageWidth};
-        for (var field: fieldArray) field.setTextFormatter(Helper.getNumberFormatter());
+        for (var field: fieldArray) field.setTextFormatter(CommonHelper.getNumberFormatter());
 
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
             mediaView.setMediaPlayer(mediaPlayer);
         });
 
-        Helper.setPlayer(mediaPlayer);
+        CommonHelper.setPlayer(mediaPlayer);
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
+        var coords = CommonHelper.getAccurateCoordinates(mouseEvent, mediaView);
         cordX.setText(String.valueOf((coords[0])));
         cordY.setText(String.valueOf(coords[1]));
     }
 
     public void OpenFile(ActionEvent ev){
-        File selectedFile = Helper.OpenFileDialog(ev);
+        File selectedFile = CommonHelper.OpenFileDialog(ev);
         if (selectedFile != null) {
             imageView.setImage(new Image(selectedFile.getAbsolutePath()));
             dragLabel.setVisible(false);
@@ -74,13 +74,13 @@ public class AddImageController extends MenuBarHelper {
     }
 
     public void OnDragOver(DragEvent dragEvent) {
-        Helper.OnDragOver(dragEvent);
+        CommonHelper.OnDragOver(dragEvent);
     }
 
     public void AddImage() throws IOException {
         boolean useScale = false;
         if (imageView.getImage() == null) {
-            Helper.setAlert(imageView.getId());
+            CommonHelper.setAlert(imageView.getId(), Alert.AlertType.ERROR);
             return;
         }
 
@@ -92,8 +92,8 @@ public class AddImageController extends MenuBarHelper {
         }
 
         for (var field: fieldArray) {
-            if (Helper.isInvalid(field)){
-                Helper.setAlert(field.getId());
+            if (CommonHelper.isInvalid(field)){
+                CommonHelper.setAlert("addImage.control." + field.getId(), Alert.AlertType.ERROR);
                 return;
             }
         }

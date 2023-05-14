@@ -1,7 +1,7 @@
 package com.project.cutit;
 
 import com.project.cutit.controllers.ProgressController;
-import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.I18n_Helper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -67,11 +67,11 @@ public class FFmpegCommands {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
+                .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
                 .addInput(FFprobe.probe(imageFile.getAbsolutePath()))
                 .addExtraArgs("-filter_complex", filter)
                 .addOutput(Main.getAppDataFile())
-                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioChannels(audioChannels)
                 .setAudioCodec(audioCodec)
                 .setAudioSampleRate(sampleRate)
                 .setVideoFrameRate(frameRate, 1)
@@ -100,11 +100,40 @@ public class FFmpegCommands {
         };
         initiateProgressBar(task);
     }
+    public static void GenerateCropCommand(String filter) throws IOException {
+        setStreamData();
+
+        FFmpegBuilder builder = new FFmpegBuilder()
+                .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
+                .overrideOutputFiles(true)
+                .addOutput(Main.getAppDataFile())
+                .addExtraArgs("-filter:v",filter)
+                .done();
+        FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
+        Task<Void> task = new Task<>() {
+            @Override
+            public Void call(){
+                executor.createJob(builder, new ProgressListener() {
+                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
+                    @Override
+                    public void progress(Progress progress) {
+                        double percentage = progress.out_time_ns / duration_ns;
+                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
+                        updateProgress(percentage, 1.0);
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                    }
+                }).run();
+                return null;
+            }
+        };
+        initiateProgressBar(task);
+    }
     public static void GenerateTextCommand(String filter) throws IOException {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
+                .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
                 .addOutput(Main.getAppDataFile())
                 .setVideoFilter(filter)
                 .done();
@@ -117,7 +146,9 @@ public class FFmpegCommands {
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
-                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
+                        long timeLeft = duration_ns - progress.out_time_ns > 0
+                                ? (long) ((duration_ns - progress.out_time_ns) / progress.speed)
+                                : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
@@ -134,24 +165,25 @@ public class FFmpegCommands {
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
         setStreamData();
-        String inputPath = Helper.normalizePath(Main.getMedia().getSource());
+        String inputPath = CommonHelper.normalizePath(Main.getMedia().getSource());
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(inputPath)
                 .overrideOutputFiles(true)
                 .addOutput(temporaryFilePath)
 
-                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
-                .setAudioCodec(audioCodec)        // using the aac codec
+                .setAudioChannels(audioChannels)
+                .setAudioCodec(audioCodec)
                 .setAudioSampleRate(sampleRate)
                 .setAudioBitRate(bitRate)
-                .setVideoCodec(videoCodec)     // Video using x264
+                .setVideoCodec(videoCodec)
                 .setVideoFrameRate(frameRate, 1)
 
                 .setStartOffset(from, TimeUnit.MILLISECONDS)
                 .setDuration(duration, TimeUnit.MILLISECONDS)
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
                 .done();
+
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
         Task<Void> task = new Task<>() {
             @Override
@@ -161,7 +193,8 @@ public class FFmpegCommands {
                     @Override
                     public void progress(Progress progress) {
                         double percentage = progress.out_time_ns / duration_ns;
-                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
+                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed)
+                                : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
@@ -179,13 +212,13 @@ public class FFmpegCommands {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))     // Filename, or a FFmpegProbeResult
-                .overrideOutputFiles(true) // Override the output if it exists
+                .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
+                .overrideOutputFiles(true)
 
-                .addOutput(temporaryFilePath)   // Filename for the destination
+                .addOutput(temporaryFilePath)
                 .addExtraArgs(extras)
 
-                .setAudioChannels(audioChannels)         // 1 - mono, 2 - stereo?
+                .setAudioChannels(audioChannels)
                 .setAudioCodec(audioCodec)
                 .setAudioSampleRate(sampleRate)
                 .setAudioBitRate(bitRate)

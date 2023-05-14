@@ -19,6 +19,37 @@ public class Main extends Application {
     public static FFmpeg FFmpeg;
     public static FFprobe FFprobe;
     private static String temporaryFilePath;
+
+    public static void stayAndSwitch(String fxmlFile, Stage stage) {
+        var filename = CheckFilename(fxmlFile);
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
+            loader.setResources(I18n_Helper.getTranslationBundle());
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getCss("style"));
+            try{
+                scene.getStylesheets().add(getCss(filename.split("\\.")[0]));
+            }catch (Exception ignored){
+                System.out.println("Stylesheet missing");
+            }
+
+            stage = new Stage();
+
+            stage.setResizable(false);
+            stage.setScene(scene);
+
+            if(!fxmlFile.equals("modules")){
+                stage.showAndWait();
+            } else {
+                stage.show();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public void start(Stage stage) throws IOException {
         temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
         new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
@@ -76,7 +107,6 @@ public class Main extends Application {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
     }
 
     public static String CheckFilename(String fxmlFile) {

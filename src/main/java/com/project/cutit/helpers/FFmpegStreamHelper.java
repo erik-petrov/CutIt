@@ -18,10 +18,8 @@ public class FFmpegStreamHelper {
     public static String videoCodec;
     public static String audioCodec;
 
-    public FFmpegStreamHelper(){}
-
     public static FFmpegProbeResult getMediaData() throws IOException {
-        return FFprobe.probe(Helper.normalizePath(Main.getMedia().getSource()));
+        return FFprobe.probe(CommonHelper.normalizePath(Main.getMedia().getSource()));
     }
 
     public static void setStreamData() throws IOException {
@@ -37,7 +35,6 @@ public class FFmpegStreamHelper {
                 videoStream = temp;
             }
         }
-
 
         sampleRate = audioStream.sample_rate > 0 ? audioStream.sample_rate : 48_000;
         bitRate = videoStream.bit_rate > 0 ? videoStream.bit_rate : 32768;

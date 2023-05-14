@@ -39,8 +39,8 @@ Border Color = Black
     -fx-text-fill: black;
 }
 
-.menu-item .label {
-    -fx-text-fill: #E5E5E5;
+.menu-item:hover {
+    -fx-background-color: #b2730a;
 }
 
 .context-menu {

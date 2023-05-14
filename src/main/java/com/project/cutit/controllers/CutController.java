@@ -2,7 +2,7 @@ package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
 import com.project.cutit.Main;
-import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
 import javafx.scene.media.Media;
@@ -19,7 +19,7 @@ public class CutController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final Helper Helper = new Helper();
+    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
         Media media = Main.getMedia();
@@ -35,7 +35,7 @@ public class CutController extends MenuBarHelper {
             seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
         });
 
-        Helper.setPlayer(mediaPlayer);
+        CommonHelper.setPlayer(mediaPlayer);
     }
 
     public void Toggle(){

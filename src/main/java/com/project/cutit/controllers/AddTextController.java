@@ -1,7 +1,7 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.Main;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.event.ActionEvent;
@@ -33,26 +33,26 @@ public class AddTextController extends MenuBarHelper {
     public Slider boxOpacity;
     @FXML
     public Pane boxOptions;
-    private final Helper Helper = new Helper();
+    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
         TextField[] fieldArray = {cordX, cordY, boxBorder, fontSize, fontBorder};
-        for (var field: fieldArray) field.setTextFormatter(Helper.getNumberFormatter());
+        for (var field: fieldArray) field.setTextFormatter(CommonHelper.getNumberFormatter());
 
         boxOptions.setDisable(true);
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
 
             mediaView.setMediaPlayer(mediaPlayer);
         });
 
-        Helper.setPlayer(mediaPlayer);
+        CommonHelper.setPlayer(mediaPlayer);
     }
     public void AddTextToVideo() throws IOException {
         if (text.getText() == null || text.getText().trim().equals("")) {
-            Helper.setAlert(text.getId());
+            CommonHelper.setAlert("addText.control." + text.getId(), Alert.AlertType.ERROR);
             return;
         }
         List<TextField> fieldArray = new ArrayList<>(List.of(cordX, cordY, fontSize));
@@ -60,12 +60,12 @@ public class AddTextController extends MenuBarHelper {
         var box = "";
         if (!boxOptions.isDisabled()) {
             fieldArray.add(boxBorder);
-            box = String.format(":box=%s:boxcolor=%s@%s:borderw=%s", 1, boxColor.getValue().toString(), boxOpacity.getValue(), boxBorder.getText());
+            box = String.format(":box=%s:boxcolor=%s@%s:borderw=%s", 1, boxColor.getValue().toString(), boxOpacity.getValue() / 100, boxBorder.getText());
         }
 
         for (var field: fieldArray) {
-            if (Helper.isInvalid(field)){
-                Helper.setAlert(field.getId());
+            if (CommonHelper.isInvalid(field)){
+                CommonHelper.setAlert(field.getId(), Alert.AlertType.ERROR);
                 return;
             }
         }
@@ -80,7 +80,7 @@ public class AddTextController extends MenuBarHelper {
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
+        var coords = CommonHelper.getAccurateCoordinates(mouseEvent, mediaView);
         cordX.setText(String.valueOf((coords[0])));
         cordY.setText(String.valueOf(coords[1]));
     }

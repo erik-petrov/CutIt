@@ -19,7 +19,7 @@
             <Font name="System Bold" size="14.0" />
         </font>
     </Label>
-    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0" style="-fx-background-color: lightgray;">
+    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0" style="-fx-background-color: grey;">
         <Label fx:id="dragLabel" alignment="CENTER" prefHeight="133.0" prefWidth="276.0" text="%addImage.control.dragLabel" textAlignment="CENTER" wrapText="true">
            <font>
                <Font name="System Italic" size="18.0" />
@@ -59,9 +59,9 @@
    </Label>
     <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
         <Menu mnemonicParsing="false" text="%menubar.file.title">
-            <CheckMenuItem mnemonicParsing="false" text="%menubar.file.keepMenu" onAction="#KeepOpen" />
-            <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" />
-            <MenuItem mnemonicParsing="false" text="%menubar.file.exit" />
+            <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
+            <MenuItem mnemonicParsing="false" onAction="#SaveAs" text="%menubar.file.saveAs" />
+            <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="%menubar.language.title">
             <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />

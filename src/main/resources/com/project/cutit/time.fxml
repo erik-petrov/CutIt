@@ -11,8 +11,8 @@
    <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
       <Menu mnemonicParsing="false" text="%menubar.file.title">
          <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
-         <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" />
-         <MenuItem mnemonicParsing="false" text="%menubar.file.exit" />
+         <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" onAction="#SaveAs"/>
+         <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.language.title">
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />

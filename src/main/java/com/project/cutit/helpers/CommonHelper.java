@@ -11,10 +11,10 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-public class Helper {
+public class CommonHelper {
 
     private MediaPlayer _mediaPlayer;
-    public Helper() {}
+    public CommonHelper() {}
 
     public void setPlayer(MediaPlayer plr) {
         _mediaPlayer = plr;
@@ -56,11 +56,16 @@ public class Helper {
     }
 
 
-    public void setAlert(String id) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(I18n_Helper.getTranslation("general.error"));
-        alert.setContentText(I18n_Helper.getTranslation("addImage.control." + id) + " " + I18n_Helper.getTranslation("error.fieldText"));
-        alert.show();
+    public Alert setAlert(String key, Alert.AlertType type) {
+        var alert = new Alert(type);
+        alert.setTitle(I18n_Helper.getTranslation("alert"));
+
+        var alertText = I18n_Helper.getTranslation(key);
+        if (type == Alert.AlertType.ERROR) alertText+= " " + I18n_Helper.getTranslation("error.fieldText");
+
+        alert.setContentText(alertText);
+        alert.showAndWait();
+        return alert;
     }
 
     public File OpenFileDialog(ActionEvent actionEvent) {

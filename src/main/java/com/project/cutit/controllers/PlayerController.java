@@ -1,6 +1,6 @@
 package com.project.cutit.controllers;
 
-import com.project.cutit.helpers.Helper;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.Main;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
@@ -16,15 +16,15 @@ public class PlayerController extends MenuBarHelper {
     @FXML
     public Button toggleButton;
     private MediaPlayer mediaPlayer;
-    private final Helper Helper = new Helper();
+    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
         Media media = Main.getMedia();
 
         mediaPlayer = new MediaPlayer(media);
-        Helper.setPlayer(mediaPlayer);
-        Helper.setMediaItems(mediaView);
-        mediaPlayer.setOnReady(() -> mediaView.addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+        CommonHelper.setPlayer(mediaPlayer);
+        CommonHelper.setMediaItems(mediaView);
+        mediaPlayer.setOnReady(() -> mediaView.addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener));
         mediaView.setMediaPlayer(mediaPlayer);
     }
 
