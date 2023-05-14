@@ -8,6 +8,16 @@ Border Color = Black
     -fx-background-color: #14213D;
 }
 
+.text {
+    -fx-text-fill: #E5E5E5;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+.label {
+    -fx-text-fill: #E5E5E5;
+}
+
 .button {
     -fx-background-color: #F29602;
     -fx-background-radius: 20px;
@@ -20,19 +30,24 @@ Border Color = Black
 }
 
 .menu-item {
-    -fx-background-color: transparent;
+    -fx-background-color: #FCA311;
+    -fx-text-fill: black;
 }
 
-.text {
+.menu-item .label {
+    -fx-font-style: none;
+    -fx-text-fill: black;
+}
+
+.menu-item:hover {
+    -fx-background-color: #b2730a;
+}
+
+.context-menu {
+    -fx-background-color: #FCA311;
     -fx-text-fill: #E5E5E5;
-    -fx-border-color: black;
-    -fx-border-width: 1px;
+    -fx-border-radius: 20;
 }
-
-.label {
-    -fx-text-fill: #E5E5E5;
-}
-
 .slider .axis .axis-tick-label {
     -fx-text-fill: black;
 }

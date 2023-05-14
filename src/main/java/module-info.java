@@ -10,4 +10,6 @@ module com.project.cutit {
     exports com.project.cutit;
     exports com.project.cutit.controllers;
     opens com.project.cutit.controllers to javafx.fxml;
+    exports com.project.cutit.helpers;
+    opens com.project.cutit.helpers to javafx.fxml;
 }

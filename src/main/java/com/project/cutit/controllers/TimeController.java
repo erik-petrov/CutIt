@@ -1,27 +1,23 @@
 package com.project.cutit.controllers;
 
+import com.project.cutit.FFmpegCommands;
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.Main;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.SetChangeListener;
-import javafx.event.EventHandler;
+import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.io.IOException;
 
-public class TimeController extends Application {
-
+public class TimeController extends MenuBarHelper {
+    @FXML
+    public Button timeButton;
     @FXML
     private Slider speedSlider;
     @FXML
@@ -29,53 +25,35 @@ public class TimeController extends Application {
     @FXML
     private Label speedFactor;
     private MediaPlayer mediaPlayer;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
+
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
+        CommonHelper.setPlayer(mediaPlayer);
         mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
+            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
             mediaView.setMediaPlayer(mediaPlayer);
         });
 
-        speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(
-                    ObservableValue<? extends Number> observableValue,
-                    Number oldValue,
-                    Number newValue) {
-                speedFactor.textProperty().setValue(
-                        String.valueOf(newValue.intValue()));
-            }
-        });
-    }
-
-    private final EventHandler<KeyEvent> keyListener = event -> {
-        if(event.getCode() == KeyCode.SPACE) {
-            Toggle();
-        }
-        event.consume();
-    };
-
-    public void Toggle(){
-        boolean playing = mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
-        if(playing){
-            mediaPlayer.pause();
-        }else{
-            mediaPlayer.play();
-        }
-
+        speedSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> speedFactor.textProperty().setValue(
+                String.valueOf(newValue.intValue())));
     }
 
     public void ChangeSpeed() throws IOException {
-        Main.GenerateSpeedCommand(Math.floor(speedSlider.getValue()));
-    }
+        double factor = Math.floor(speedSlider.getValue());
+        if(factor < 0){
+            factor = 1/Math.abs(factor);
+        }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+        if(factor == 0){
+            factor = 1.0;
+        }
+
+        String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
+        String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
+
+        FFmpegCommands.GenerateSpeedCommand(factor, extras, filter);
     }
 }

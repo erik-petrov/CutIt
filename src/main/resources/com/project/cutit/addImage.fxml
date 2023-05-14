@@ -19,7 +19,7 @@
             <Font name="System Bold" size="14.0" />
         </font>
     </Label>
-    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0" style="-fx-background-color: lightgrey;">
+    <StackPane layoutX="14.0" layoutY="102.0" prefHeight="270.0" prefWidth="350.0" style="-fx-background-color: grey;">
         <Label fx:id="dragLabel" alignment="CENTER" prefHeight="133.0" prefWidth="276.0" text="%addImage.control.dragLabel" textAlignment="CENTER" wrapText="true">
            <font>
                <Font name="System Italic" size="18.0" />
@@ -27,12 +27,12 @@
         </Label>
         <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="350.0" onDragDropped="#onDragDropped" onDragOver="#OnDragOver" pickOnBounds="true" preserveRatio="true" />
     </StackPane>
-    <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFileDialog" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
+    <Button layoutX="26.0" layoutY="446.0" mnemonicParsing="false" onAction="#OpenFile" prefHeight="44.0" prefWidth="120.0" text="%general.button.open">
         <font>
             <Font name="System Bold" size="18.0" />
         </font>
     </Button>
-   <Label alignment="CENTER" layoutX="362.0" layoutY="50.0" prefHeight="52.0" prefWidth="276.0" text="%addImage.title" textAlignment="CENTER">
+   <Label alignment="CENTER" layoutX="362.0" layoutY="40.0" prefHeight="52.0" prefWidth="276.0" text="%addImage.title" textAlignment="CENTER">
       <font>
          <Font name="System Bold" size="24.0" />
       </font>
@@ -57,4 +57,25 @@
          <Font name="System Bold" size="14.0" />
       </font>
    </Label>
+    <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
+        <Menu mnemonicParsing="false" text="%menubar.file.title">
+            <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
+            <MenuItem mnemonicParsing="false" onAction="#SaveAs" text="%menubar.file.saveAs" />
+            <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.language.title">
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.module.title">
+            <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" />
+            <MenuItem mnemonicParsing="false" text="%menubar.module.addText" userData="addText" />
+            <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" />
+            <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" />
+            <MenuItem mnemonicParsing="false" text="%menubar.module.time" userData="time" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.help.title">
+            <MenuItem mnemonicParsing="false" text="%menubar.help.about" />
+        </Menu>
+    </MenuBar>
 </AnchorPane>

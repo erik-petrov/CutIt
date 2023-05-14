@@ -7,9 +7,10 @@
     -fx-background-color: #b87600;
     transition: -fx-background-color 1s;
 }
-.gridpane {
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-hgap: 1px;
-    -fx-vgap: 1px;
+.alternative-button {
+    -fx-background-color: #14213D;
+}
+.alternative-button:hover {
+    transition: -fx-background-color 1s;
+    -fx-background-color: #2d4986;
 }

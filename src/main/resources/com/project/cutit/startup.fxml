@@ -15,19 +15,17 @@
          <Font name="System Bold" size="18.0" />
       </font>
    </Button>
-   <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="600.0">
-     <menus>
-       <Menu mnemonicParsing="false" text="%menu.lang">
-         <items>
-               <MenuItem mnemonicParsing="false" onAction="#LanguageEn" text="%menu.lang.en" />
-               <MenuItem mnemonicParsing="false" onAction="#LanguageEt" text="%menu.lang.et" />
-         </items>
-       </Menu>
-         <Menu mnemonicParsing="false" text="%menu.seek">
-             <items>
-                 <MenuItem mnemonicParsing="false" onAction="#LanguageEn" text="%menu.seek" />
-             </items>
-         </Menu>
-     </menus>
-   </MenuBar>
+    <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
+        <Menu mnemonicParsing="false" text="%menubar.file.title">
+            <CheckMenuItem mnemonicParsing="false" text="%menubar.file.keepMenu" onAction="#SaveAs"/>
+            <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.language.title">
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.help.title">
+            <MenuItem mnemonicParsing="false" text="%menubar.help.about"/>
+        </Menu>
+    </MenuBar>
 </AnchorPane>

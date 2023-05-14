@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.CropController">
+   <children>
+      <MediaView fx:id="mediaView" fitHeight="500.0" fitWidth="889.0" layoutX="157.0" layoutY="14.0" onMouseClicked="#mediaClick" />
+      <TextField fx:id="width" layoutX="101.0" layoutY="587.0" />
+      <TextField fx:id="y" layoutX="279.0" layoutY="646.0" />
+      <TextField fx:id="height" layoutX="101.0" layoutY="646.0" />
+      <TextField layoutX="279.0" layoutY="587.0" fx:id="x" />
+      <Label layoutX="56.0" layoutY="591.0" prefHeight="17.0" prefWidth="34.0" text="%crop.control.width" />
+      <Label layoutX="55.0" layoutY="650.0" prefHeight="17.0" prefWidth="34.0" text="%crop.control.height" />
+      <Label layoutX="262.0" layoutY="591.0" text="X">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="263.0" layoutY="650.0" text="Y">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Button onAction="#Crop" layoutX="501.0" layoutY="587.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="201.0" text="%general.button.crop" />
+   </children>
+</AnchorPane>
