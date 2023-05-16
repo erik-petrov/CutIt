@@ -10,6 +10,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
+import static com.project.cutit.helpers.CommonHelper.setMediaItems;
+
 public class PlayerController extends MenuBarHelper {
     @FXML
     public MediaView mediaView;
@@ -19,13 +21,7 @@ public class PlayerController extends MenuBarHelper {
     private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
-        Media media = Main.getMedia();
-
-        mediaPlayer = new MediaPlayer(media);
-        CommonHelper.setPlayer(mediaPlayer);
-        CommonHelper.setMediaItems(mediaView);
-        mediaPlayer.setOnReady(() -> mediaView.addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener));
-        mediaView.setMediaPlayer(mediaPlayer);
+        setMediaItems(mediaView, mediaPlayer, () -> mediaView.addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener));
     }
 
     public void Toggle(){

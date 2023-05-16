@@ -15,17 +15,18 @@
          <Font name="System Bold" size="18.0" />
       </font>
    </Button>
-    <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
+    <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
         <Menu mnemonicParsing="false" text="%menubar.file.title">
-            <CheckMenuItem mnemonicParsing="false" text="%menubar.file.keepMenu" onAction="#SaveAs"/>
-            <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
+            <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
+            <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="%menubar.language.title">
             <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
             <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
         </Menu>
+
         <Menu mnemonicParsing="false" text="%menubar.help.title">
-            <MenuItem mnemonicParsing="false" text="%menubar.help.about"/>
+            <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
         </Menu>
     </MenuBar>
 </AnchorPane>

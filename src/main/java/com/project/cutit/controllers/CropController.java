@@ -1,24 +1,20 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.Helper;
 import com.project.cutit.Main;
-import javafx.application.Application;
-import javafx.beans.InvalidationListener;
+import com.project.cutit.helpers.CommonHelper;
+import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class CropController {
+public class CropController extends MenuBarHelper {
     @FXML
     private TextField width;
     @FXML
@@ -30,7 +26,7 @@ public class CropController {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final Helper Helper = new Helper();
+    private final CommonHelper Helper = new CommonHelper();
     public void initialize(){
         Media media = Main.getMedia();
         mediaPlayer = new MediaPlayer(media);
@@ -43,8 +39,9 @@ public class CropController {
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        x.setText(String.valueOf(((int) mouseEvent.getX())));
-        y.setText(String.valueOf(((int) mouseEvent.getY())));
+        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
+        x.setText(String.valueOf(coords[0]));
+        y.setText(String.valueOf(coords[1]));
     }
 
     public void Crop() throws IOException {

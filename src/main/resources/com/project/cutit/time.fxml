@@ -8,25 +8,25 @@
    <MediaView fx:id="mediaView" fitHeight="514.0" fitWidth="900.0" layoutX="44.0" layoutY="50.0" />
    <Slider fx:id="speedSlider" blockIncrement="1.0" layoutX="244.0" layoutY="564.0" majorTickUnit="2.0" max="10.0" min="-10.0" minorTickCount="1" prefHeight="14.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" />
    <Button fx:id="timeButton" alignment="CENTER" layoutX="450.0" layoutY="618.0" mnemonicParsing="false" onAction="#ChangeSpeed" text="%time.button" />
-   <MenuBar layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
+   <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
       <Menu mnemonicParsing="false" text="%menubar.file.title">
          <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
-         <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" onAction="#SaveAs"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
+         <MenuItem mnemonicParsing="false" onAction="#SaveAs" text="%menubar.file.saveAs" />
+         <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.language.title">
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.module.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.addText" userData="addText" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.addImage" userData="addImage" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" />
+         <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" onAction="#ModuleSwitch"/>
+         <MenuItem mnemonicParsing="false" text="%menubar.module.addText" userData="addText" onAction="#ModuleSwitch"/>
+         <MenuItem mnemonicParsing="false" text="%menubar.module.addImage" userData="addImage" onAction="#ModuleSwitch"/>
+         <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" onAction="#ModuleSwitch"/>
+         <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" onAction="#ModuleSwitch"/>
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.help.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.help.about" />
+         <MenuItem mnemonicParsing="false" text="%menubar.help.about" onAction="#AboutWindow"/>
       </Menu>
    </MenuBar>
 </AnchorPane>
