@@ -58,9 +58,6 @@ public class CommonHelper {
         }
         dragEvent.consume();
     }
-    public void setMediaItems(MediaView mediaView, MediaPlayer mediaPlayer) {
-        setMediaItems(mediaView, mediaPlayer,() -> {});
-    }
 
     public static void setMediaItems(MediaView mediaView, MediaPlayer mediaPlayer, Runnable runnable) {
         var helper = new CommonHelper();

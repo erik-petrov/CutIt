@@ -3,17 +3,17 @@ package com.project.cutit.helpers;
 import com.project.cutit.Main;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.controlsfx.control.action.Action;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +82,7 @@ public abstract class MenuBarHelper {
         }
     }
 
-    public void WindowExit(ActionEvent actionEvent) {
+    public void WindowExit() {
         var Helper = new CommonHelper();
         if (Helper.setAlert("alert.confirm", Alert.AlertType.CONFIRMATION).getResult().getButtonData() == ButtonBar.ButtonData.OK_DONE)
             Platform.exit();

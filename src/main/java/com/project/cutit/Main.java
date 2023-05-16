@@ -134,13 +134,6 @@ public class Main extends Application {
 
     }
 
-    private static void centerStage(Stage stage) {
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-
-        stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
-        stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
-    }
-
     public static String CheckFilename(String fxmlFile) {
         return CheckFilename(fxmlFile, ".fxml");
     }
