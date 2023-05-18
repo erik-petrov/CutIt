@@ -65,7 +65,7 @@ public class AddTextController extends MenuBarHelper {
 
         for (var field: fieldArray) {
             if (CommonHelper.isInvalid(field)){
-                CommonHelper.setAlert(field.getId(), Alert.AlertType.ERROR);
+                CommonHelper.setAlert("addText.control." + field.getId(), Alert.AlertType.ERROR);
                 return;
             }
         }

@@ -55,7 +55,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Slider fx:id="boxOpacity" blockIncrement="0.1" layoutX="96.0" layoutY="85.0" prefHeight="14.0" prefWidth="114.0" showTickLabels="true" showTickMarks="true" />
+      <Slider fx:id="boxOpacity" blockIncrement="0.1" layoutX="96.0" layoutY="85.0" prefHeight="14.0" prefWidth="114.0" showTickLabels="true" showTickMarks="true" value="100.0" />
    </Pane>
    <Pane layoutX="41.0" layoutY="102.0" prefHeight="81.0" prefWidth="185.0">
       <TextField fx:id="fontSize" layoutX="133.0" prefHeight="14.0" prefWidth="46.0" />
@@ -97,14 +97,14 @@
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.module.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" onAction="#ModuleSwitch"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.module.addImage" userData="addImage" onAction="#ModuleSwitch"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" onAction="#ModuleSwitch"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" onAction="#ModuleSwitch"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.module.time" userData="time" onAction="#ModuleSwitch"/>
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.player" userData="player" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.addImage" userData="addImage" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.crop" userData="crop" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.cut" userData="cut" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.time" userData="time" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.help.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.help.about" onAction="#AboutWindow"/>
+         <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
       </Menu>
    </MenuBar>
 </AnchorPane>

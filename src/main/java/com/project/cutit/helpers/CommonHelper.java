@@ -16,11 +16,19 @@ import java.io.File;
 public class CommonHelper {
 
     private MediaPlayer _mediaPlayer;
+    private MediaView _mediaView;
+
     public CommonHelper() {}
+
+    public CommonHelper(MediaPlayer plr, MediaView view) {
+        _mediaPlayer = plr;
+        _mediaView = view;
+    }
 
     public void setPlayer(MediaPlayer plr) {
         _mediaPlayer = plr;
     }
+
     public boolean isInvalid(TextField field) { return field.getText().isEmpty(); }
     public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
 
@@ -59,20 +67,20 @@ public class CommonHelper {
         dragEvent.consume();
     }
 
-    public static void setMediaItems(MediaView mediaView, MediaPlayer mediaPlayer, Runnable runnable) {
-        var helper = new CommonHelper();
-        helper.setPlayer(mediaPlayer);
+    public void setMediaItems() {
+        setMediaItems(() -> {});
+    }
 
-        mediaPlayer = new MediaPlayer(Main.getMedia());
-        MediaPlayer finalMediaPlayer = mediaPlayer;
-        mediaPlayer.setOnError(() -> setMediaItems(mediaView, finalMediaPlayer, runnable));
-        mediaPlayer.setOnReady(() -> {
-                mediaView.setMediaPlayer(finalMediaPlayer);
-                mediaView.addEventHandler(KeyEvent.KEY_PRESSED, helper.keyListener);
-                System.out.println(mediaView.getFitWidth());
-                System.out.println(Main.getMedia().getOnError());
-                runnable.run();
+    public void setMediaItems(Runnable runnable) {
+        _mediaPlayer = new MediaPlayer(Main.getMedia());
+        _mediaPlayer.setOnReady(() -> {
+            runnable.run();
+            _mediaView.setMediaPlayer(_mediaPlayer);
         });
+        _mediaPlayer.setOnError(() -> {
+            System.out.println("Triggered");
+            setMediaItems(runnable);});
+
     }
 
 
