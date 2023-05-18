@@ -50,7 +50,7 @@ public class Main extends Application {
 
         }catch (Exception e){
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(I18n_Helper.getTranslation("error.ffmpegFolder"));
+            a.setContentText("Please INSTALL ffmpeg INTO resources FOLDER and RENAME the folder to 'ffmpeg'");
             a.showAndWait();
             System.exit(0);
         }
