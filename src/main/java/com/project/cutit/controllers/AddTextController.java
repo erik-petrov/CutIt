@@ -24,7 +24,7 @@ public class AddTextController extends MenuBarHelper {
     @FXML
     public MediaPlayer mediaPlayer;
     @FXML
-    public TextField cordY, cordX, boxBorder, fontSize, fontBorder;
+    public TextField cordY, cordX, fontSize, fontBorder;
     @FXML
     public TextArea text;
     @FXML
@@ -33,46 +33,40 @@ public class AddTextController extends MenuBarHelper {
     public Slider boxOpacity;
     @FXML
     public Pane boxOptions;
-    private final CommonHelper CommonHelper = new CommonHelper();
+    private CommonHelper Helper;
 
     public void initialize() {
-        TextField[] fieldArray = {cordX, cordY, boxBorder, fontSize, fontBorder};
-        for (var field: fieldArray) field.setTextFormatter(CommonHelper.getNumberFormatter());
+        Helper = new CommonHelper(mediaPlayer, mediaView, () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+
+        TextField[] fieldArray = {cordX, cordY, fontSize, fontBorder};
+        for (var field: fieldArray) field.setTextFormatter(Helper.getNumberFormatter());
 
         boxOptions.setDisable(true);
-        Media media = Main.getMedia();
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
+        Helper.setMediaItems();
 
-            mediaView.setMediaPlayer(mediaPlayer);
-        });
-
-        CommonHelper.setPlayer(mediaPlayer);
     }
     public void AddTextToVideo() throws IOException {
         if (text.getText() == null || text.getText().trim().equals("")) {
-            CommonHelper.setAlert("addText.control." + text.getId(), Alert.AlertType.ERROR);
+            Helper.setAlert("addText.control." + text.getId(), Alert.AlertType.ERROR);
             return;
         }
-        List<TextField> fieldArray = new ArrayList<>(List.of(cordX, cordY, fontSize));
+        List<TextField> fieldArray = new ArrayList<>(List.of(cordX, cordY, fontSize, fontBorder));
 
         var box = "";
         if (!boxOptions.isDisabled()) {
-            fieldArray.add(boxBorder);
-            box = String.format(":box=%s:boxcolor=%s@%s:borderw=%s", 1, boxColor.getValue().toString(), boxOpacity.getValue() / 100, boxBorder.getText());
+            box = String.format(":box=%s:boxcolor=%s@%s", 1 /* Enable box */, boxColor.getValue().toString(), boxOpacity.getValue() / 100);
         }
 
         for (var field: fieldArray) {
-            if (CommonHelper.isInvalid(field)){
-                CommonHelper.setAlert("addText.control." + field.getId(), Alert.AlertType.ERROR);
+            if (Helper.isInvalid(field)){
+                Helper.setAlert("addText.control." + field.getId(), Alert.AlertType.ERROR);
                 return;
             }
         }
 
 
-        var videoFilter = String.format("drawtext=text='%s':fontsize=%s:fontcolor=%s:x=%s:y=%s%s", text.getText(), fontSize.getText(), fontColor.getValue().toString(),cordX.getText(),cordY.getText(), box);
-        FFmpegCommands.GenerateTextCommand(videoFilter);
+        var videoFilter = String.format("drawtext=text='%s':fontsize=%s:fontcolor=%s:x=%s:y=%s:borderw=%s%s", text.getText(), fontSize.getText(), fontColor.getValue().toString(),cordX.getText(), cordY.getText(), fontBorder.getText(), box);
+        FFmpegCommands.GenerateTextCommand(videoFilter,() -> Helper.setMediaItems());
     }
 
     public void AddBoxClick(ActionEvent actionEvent) {
@@ -80,7 +74,7 @@ public class AddTextController extends MenuBarHelper {
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        var coords = CommonHelper.getAccurateCoordinates(mouseEvent, mediaView);
+        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
         cordX.setText(String.valueOf((coords[0])));
         cordY.setText(String.valueOf(coords[1]));
     }

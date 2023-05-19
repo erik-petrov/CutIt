@@ -23,31 +23,22 @@ public class TimeController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     @FXML
-    private Label speedFactor;
     private MediaPlayer mediaPlayer;
-    private final CommonHelper CommonHelper = new CommonHelper();
+    private CommonHelper Helper;
 
     public void initialize() {
+        Helper = new CommonHelper(mediaPlayer, mediaView, () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+        Helper.setMediaItems();
 
-        Media media = Main.getMedia();
-        mediaPlayer = new MediaPlayer(media);
-        CommonHelper.setPlayer(mediaPlayer);
-        mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
-            mediaView.setMediaPlayer(mediaPlayer);
-        });
-
-        speedSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> speedFactor.textProperty().setValue(
-                String.valueOf(newValue.intValue())));
     }
 
     public void ChangeSpeed() throws IOException {
         double factor = Math.floor(speedSlider.getValue());
-        if(factor < 0){
+        if (factor < 0){
             factor = 1/Math.abs(factor);
         }
 
-        if(factor == 0){
+        if (factor == 0){
             factor = 1.0;
         }
 

@@ -10,6 +10,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -17,7 +18,7 @@ public class CommonHelper {
 
     private MediaPlayer _mediaPlayer;
     private MediaView _mediaView;
-
+    private Runnable _runnable = () -> {};
     public CommonHelper() {}
 
     public CommonHelper(MediaPlayer plr, MediaView view) {
@@ -25,8 +26,31 @@ public class CommonHelper {
         _mediaView = view;
     }
 
+    public CommonHelper(MediaPlayer plr, MediaView view, Runnable runnable) {
+        _mediaPlayer = plr;
+        _mediaView = view;
+        _runnable =  runnable;
+    }
+    public MediaView getMediaView() { return _mediaView; }
+    public MediaPlayer getMediaPlayer() { return _mediaPlayer; }
+
     public void setPlayer(MediaPlayer plr) {
         _mediaPlayer = plr;
+    }
+
+    public void setRunnable(Runnable runnable) {
+        _runnable = runnable;
+    }
+
+    public void setMediaItems() {
+        _mediaPlayer = new MediaPlayer(Main.getMedia());
+
+        _mediaPlayer.setOnReady(() -> {
+            _runnable.run();
+            _mediaView.setMediaPlayer(_mediaPlayer);
+        });
+
+        _mediaPlayer.setOnError(this::setMediaItems);
     }
 
     public boolean isInvalid(TextField field) { return field.getText().isEmpty(); }
@@ -65,22 +89,6 @@ public class CommonHelper {
             dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         }
         dragEvent.consume();
-    }
-
-    public void setMediaItems() {
-        setMediaItems(() -> {});
-    }
-
-    public void setMediaItems(Runnable runnable) {
-        _mediaPlayer = new MediaPlayer(Main.getMedia());
-        _mediaPlayer.setOnReady(() -> {
-            runnable.run();
-            _mediaView.setMediaPlayer(_mediaPlayer);
-        });
-        _mediaPlayer.setOnError(() -> {
-            System.out.println("Triggered");
-            setMediaItems(runnable);});
-
     }
 
 
@@ -138,7 +146,7 @@ public class CommonHelper {
         return new int[] {(int) accurateX, (int) accurateY};
     }
 
-    public void Toggle(){
+    public void Toggle() {
         boolean playing = _mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
 
         if (playing) {
@@ -156,4 +164,6 @@ public class CommonHelper {
         }
         return true;
     }
+
+
 }

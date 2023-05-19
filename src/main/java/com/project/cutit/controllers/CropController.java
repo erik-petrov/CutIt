@@ -26,16 +26,10 @@ public class CropController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final CommonHelper Helper = new CommonHelper();
+    private CommonHelper Helper;
     public void initialize(){
-        Media media = Main.getMedia();
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener);
-            mediaView.setMediaPlayer(mediaPlayer);
-        });
-
-        Helper.setPlayer(mediaPlayer);
+        Helper = new CommonHelper(mediaPlayer, mediaView, () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+        Helper.setMediaItems();
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
@@ -56,6 +50,6 @@ public class CropController extends MenuBarHelper {
 
         String filter = "crop="+w+":"+h+":"+xV+":"+yV;
 
-        FFmpegCommands.GenerateCropCommand(filter);
+        FFmpegCommands.GenerateCropCommand(filter, () -> Helper.setMediaItems());
     }
 }

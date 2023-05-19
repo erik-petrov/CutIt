@@ -77,7 +77,7 @@ public abstract class MenuBarHelper {
         File file = fileChooser.showSaveDialog(menuItem.getParentPopup().getOwnerWindow().getScene().getWindow());
         if (file != null) {
             try {
-                Files.copy(Paths.get(Main.getAppDataFile()), Paths.get(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Paths.get(Main.getMedia().getSource().substring(8)), Paths.get(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING); //It does not like : symbol so removing file:/C: from path
             } catch (IOException ignored) { }
         }
     }
