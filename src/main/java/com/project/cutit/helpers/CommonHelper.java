@@ -8,22 +8,73 @@ import javafx.scene.input.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 import java.io.File;
 
 public class CommonHelper {
 
     private MediaPlayer _mediaPlayer;
+    private MediaView _mediaView;
+    private Runnable _runnable = () -> {};
     public CommonHelper() {}
+
+    public CommonHelper(MediaPlayer plr, MediaView view) {
+        _mediaPlayer = plr;
+        _mediaView = view;
+    }
+
+    public CommonHelper(MediaPlayer plr, MediaView view, Runnable runnable) {
+        _mediaPlayer = plr;
+        _mediaView = view;
+        _runnable =  runnable;
+    }
+    public MediaView getMediaView() { return _mediaView; }
+    public MediaPlayer getMediaPlayer() { return _mediaPlayer; }
 
     public void setPlayer(MediaPlayer plr) {
         _mediaPlayer = plr;
     }
-    public void centerControl(Control control) { control.setLayoutX(control.getParent().getLayoutX() - control.getMaxWidth()); }
+
+    public void setRunnable(Runnable runnable) {
+        _runnable = runnable;
+    }
+
+    public void setMediaItems() {
+        _mediaPlayer = new MediaPlayer(Main.getMedia());
+
+        _mediaPlayer.setOnReady(() -> {
+            _runnable.run();
+            _mediaView.setMediaPlayer(_mediaPlayer);
+        });
+
+        _mediaPlayer.setOnError(this::setMediaItems);
+    }
+
     public boolean isInvalid(TextField field) { return field.getText().isEmpty(); }
     public static String normalizePath(String original){ return original.split("/", 2)[1].replaceAll("%20", " "); }
 
     public static String getDesktop() { return System.getProperty("user.home") + "/Desktop"; }
+
+    public static final EventHandler<WindowEvent> closeClick = event -> {
+        var stage = (Stage) event.getSource();
+        var rootId = stage.getScene().getRoot().getId();
+        stage.close();
+        if (!MenuBarHelper.isOpen) {
+
+            if (!rootId.equals("modules") && !rootId.equals("startup")) {
+                Main.switchScene("modules");
+            }
+
+            else if (rootId.equals("modules")) {
+                Main.switchScene("startup");
+            }
+        }
+
+        event.consume();
+    };
 
     public final EventHandler<KeyEvent> keyListener = event -> {
         if(event.getCode() == KeyCode.SPACE) {
@@ -38,21 +89,6 @@ public class CommonHelper {
             dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         }
         dragEvent.consume();
-    }
-    public void setMediaItems(MediaView mediaView) {
-        setMediaItems(mediaView, () -> {});
-    }
-
-    public void setMediaItems(MediaView mediaView, Runnable runnable) {
-        _mediaPlayer = new MediaPlayer(Main.getMedia());
-        _mediaPlayer.setOnError(() -> setMediaItems(mediaView, runnable));
-        _mediaPlayer.setOnReady(() -> {
-                mediaView.setMediaPlayer(_mediaPlayer);
-                mediaView.addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
-                System.out.println(mediaView.getFitWidth());
-                System.out.println(Main.getMedia().getOnError());
-                runnable.run();
-        });
     }
 
 
@@ -110,7 +146,7 @@ public class CommonHelper {
         return new int[] {(int) accurateX, (int) accurateY};
     }
 
-    public void Toggle(){
+    public void Toggle() {
         boolean playing = _mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
 
         if (playing) {
@@ -119,4 +155,15 @@ public class CommonHelper {
             _mediaPlayer.play();
         }
     }
+
+    public boolean CheckValues(String ... args){
+        for (String arg : args) {
+            if(arg.isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

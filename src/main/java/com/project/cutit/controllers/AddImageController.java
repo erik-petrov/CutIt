@@ -2,7 +2,6 @@ package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
 import com.project.cutit.helpers.CommonHelper;
-import com.project.cutit.Main;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
@@ -29,30 +27,25 @@ public class AddImageController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final CommonHelper CommonHelper = new CommonHelper();
+    private CommonHelper Helper;
 
     public void initialize() {
+        Helper = new CommonHelper(mediaPlayer, mediaView, () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+
         TextField[] fieldArray = {cordX, cordY, imageHeight, imageWidth};
-        for (var field: fieldArray) field.setTextFormatter(CommonHelper.getNumberFormatter());
+        for (var field: fieldArray) field.setTextFormatter(Helper.getNumberFormatter());
 
-        Media media = Main.getMedia();
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> {
-            mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, CommonHelper.keyListener);
-            mediaView.setMediaPlayer(mediaPlayer);
-        });
-
-        CommonHelper.setPlayer(mediaPlayer);
+        Helper.setMediaItems();
     }
 
     public void mediaClick(MouseEvent mouseEvent) {
-        var coords = CommonHelper.getAccurateCoordinates(mouseEvent, mediaView);
+        var coords = Helper.getAccurateCoordinates(mouseEvent, mediaView);
         cordX.setText(String.valueOf((coords[0])));
         cordY.setText(String.valueOf(coords[1]));
     }
 
     public void OpenFile(ActionEvent ev){
-        File selectedFile = CommonHelper.OpenFileDialog(ev);
+        File selectedFile = Helper.OpenFileDialog(ev);
         if (selectedFile != null) {
             imageView.setImage(new Image(selectedFile.getAbsolutePath()));
             dragLabel.setVisible(false);
@@ -74,13 +67,13 @@ public class AddImageController extends MenuBarHelper {
     }
 
     public void OnDragOver(DragEvent dragEvent) {
-        CommonHelper.OnDragOver(dragEvent);
+        Helper.OnDragOver(dragEvent);
     }
 
     public void AddImage() throws IOException {
         boolean useScale = false;
         if (imageView.getImage() == null) {
-            CommonHelper.setAlert(imageView.getId(), Alert.AlertType.ERROR);
+            Helper.setAlert(imageView.getId(), Alert.AlertType.ERROR);
             return;
         }
 
@@ -92,8 +85,8 @@ public class AddImageController extends MenuBarHelper {
         }
 
         for (var field: fieldArray) {
-            if (CommonHelper.isInvalid(field)){
-                CommonHelper.setAlert("addImage.control." + field.getId(), Alert.AlertType.ERROR);
+            if (Helper.isInvalid(field)){
+                Helper.setAlert("addImage.control." + field.getId(), Alert.AlertType.ERROR);
                 return;
             }
         }
@@ -104,7 +97,7 @@ public class AddImageController extends MenuBarHelper {
         }
         imageFilter += String.format("overlay=%s:%s", cordX.getText(), cordY.getText());
 
-        FFmpegCommands.GenerateImageCommand(imageView.getImage().getUrl(), imageFilter);
+        FFmpegCommands.GenerateImageCommand(imageView.getImage().getUrl(), imageFilter, () -> Helper.setMediaItems());
     }
 }
 

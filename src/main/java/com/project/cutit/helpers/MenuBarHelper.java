@@ -3,69 +3,109 @@ package com.project.cutit.helpers;
 import com.project.cutit.Main;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.project.cutit.Main.switchScene;
 
 public abstract class MenuBarHelper {
 
     public static boolean isOpen = false;
-    public void LanguageSwitch(ActionEvent actionEvent) {
-        var button = (MenuItem)actionEvent.getSource();
-        I18n_Helper.setProjectLocale( button.getUserData().toString() );
 
+    public void LanguageSwitch(ActionEvent actionEvent) {
+        var menuItem = (MenuItem) actionEvent.getSource();
+        String newLocale = menuItem.getUserData().toString();
+
+        List<Window> openWindows = new ArrayList<>(Window.getWindows());
+
+        I18n_Helper.setProjectLocale(newLocale);
+
+        for (Window window : openWindows) {
+            if (window instanceof Stage stage) {
+                double oldX = stage.getX();
+                double oldY = stage.getY();
+
+                Main.switchScene(stage, stage.getScene().getRoot().getId());
+
+                stage.setX(oldX);
+                stage.setY(oldY);
+            }
+        }
     }
 
     public void KeepOpen(ActionEvent actionEvent) {
         var menuItem = (CheckMenuItem) actionEvent.getSource();
         isOpen = menuItem.isSelected();
+
+        findAndSetCheckedMenuItems(isOpen);
     }
 
-    public void SaveAs(ActionEvent actionEvent) {
-        var control = (Control) actionEvent.getSource();
-        //Save temp as specified name in specified location
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(I18n_Helper.getTranslation("fileChooser.saveAs.title"));
-        File file = fileChooser.showSaveDialog(control.getScene().getWindow());
-        if (file != null) {
-            // Do something with the selected file...
+    private void findAndSetCheckedMenuItems(boolean selected) {
+        for (Window window : Window.getWindows()) {
+            Scene scene = window.getScene();
+            if (scene != null) {
+                MenuBar menuBar = (MenuBar) scene.lookup("#menubar");
+                if (menuBar != null) {
+                    for (MenuItem item : menuBar.getMenus().get(0).getItems()) {
+                        if (item instanceof CheckMenuItem) {
+                            ((CheckMenuItem) item).setSelected(selected);
+                        }
+                    }
+                }
+            }
         }
     }
 
-    public void WindowExit(ActionEvent actionEvent) {
+    public void SaveAs(ActionEvent actionEvent) {
+        var menuItem = (MenuItem) actionEvent.getSource();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18n_Helper.getTranslation("fileChooser.saveAs.title"));
+        fileChooser.setInitialDirectory(new File(CommonHelper.getDesktop()));
+        fileChooser.getExtensionFilters().add( new FileChooser.ExtensionFilter("MP4 (*.mp4)", "*.mp4"));
+        File file = fileChooser.showSaveDialog(menuItem.getParentPopup().getOwnerWindow().getScene().getWindow());
+        if (file != null) {
+            try {
+                Files.copy(Paths.get(Main.getMedia().getSource().substring(8)), Paths.get(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING); //It does not like : symbol so removing file:/C: from path
+            } catch (IOException ignored) { }
+        }
+    }
+
+    public void WindowExit() {
         var Helper = new CommonHelper();
         if (Helper.setAlert("alert.confirm", Alert.AlertType.CONFIRMATION).getResult().getButtonData() == ButtonBar.ButtonData.OK_DONE)
             Platform.exit();
-
     }
 
 
     public void ModuleSwitch(ActionEvent actionEvent) {
-        var menuItem = (Control) actionEvent.getSource();
-        var userData = menuItem.getUserData().toString();
-
-        if (!isOpen) {
-            var windows = Window.getWindows();
-            var lastWindow = windows.get(windows.size() - 1);
-
-            for (var thisWindow: windows) {
-                if (thisWindow == lastWindow) {
-                    continue;
-                }
-                var stageWindow = (Stage) thisWindow;
-                stageWindow.close();
-            }
-
-            Main.switchScene(userData);
-
-        } else Main.stayAndSwitch(userData, (Stage) menuItem.getScene().getWindow());
+        switchScene( ((MenuItem) actionEvent.getSource()).getUserData().toString() );
     }
 
-    public void AboutWindow() {
-        //override in controller class
-        //set alert with information about this window
+    public void AboutWindow(ActionEvent actionEvent) {
+        var menuItem = (MenuItem) actionEvent.getSource();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(I18n_Helper.getTranslation("alert.info"));
+        alert.setHeaderText(null);
+
+        var translation = I18n_Helper.getTranslation("about." +  menuItem.getParentPopup().getOwnerWindow().getScene().getRoot().getId() );
+        translation = translation.replace("\\n", System.lineSeparator());
+        TextArea textArea = new TextArea(translation);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        alert.getDialogPane().setContent(textArea);
+        alert.showAndWait();
     }
 }

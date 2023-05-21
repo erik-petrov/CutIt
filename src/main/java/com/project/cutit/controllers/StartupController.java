@@ -63,14 +63,10 @@ public class StartupController extends MenuBarHelper {
         File selectedFile = fileChooser.showOpenDialog(openButton.getScene().getWindow());
 
         // Check if a file was selected
-        if (selectedFile == null) {
-            throw new RuntimeException();
+        if (selectedFile != null) {
+            Media media = new Media(selectedFile.toURI().toString());
+            loadAndSwitch(media, "modules");
         }
-        Media media = new Media(selectedFile.toURI().toString());
-        if(media.getError() != null){
-            throw new RuntimeException();
-        }
-       loadAndSwitch(media, "modules");
     }
 
 }

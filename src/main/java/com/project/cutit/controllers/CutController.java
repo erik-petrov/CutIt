@@ -5,7 +5,6 @@ import com.project.cutit.Main;
 import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
@@ -19,23 +18,16 @@ public class CutController extends MenuBarHelper {
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private final CommonHelper CommonHelper = new CommonHelper();
 
     public void initialize() {
-        Media media = Main.getMedia();
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> {
-
-            seekSlider.setMax(media.getDuration().toMillis());
+        CommonHelper Helper = new CommonHelper(mediaPlayer, mediaView);
+        Helper.setRunnable(() -> {
+            seekSlider.setMax(Main.getMedia().getDuration().toMillis());
             seekSlider.adjustHighValue(seekSlider.getMax());
-
-
-
-            seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
-            seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> mediaPlayer.seek(new Duration(new_val.doubleValue())));
+            seekSlider.highValueProperty().addListener((ov, old_val, new_val) -> Helper.getMediaPlayer().seek(new Duration(new_val.doubleValue())));
+            seekSlider.lowValueProperty().addListener((ov, old_val, new_val) -> Helper.getMediaPlayer().seek(new Duration(new_val.doubleValue())));
         });
-
-        CommonHelper.setPlayer(mediaPlayer);
+        Helper.setMediaItems();
     }
 
     public void Toggle(){

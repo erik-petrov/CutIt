@@ -38,7 +38,9 @@ public class FFmpegCommands {
 
         return salt.toString();
     }
-    public static void initiateProgressBar(Task<Void> task) throws IOException {
+    public static void initiateProgressBar(Task<Void> task) throws IOException { initiateProgressBar(task, () -> {}); }
+
+    public static void initiateProgressBar(Task<Void> task, Runnable additionalActions) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
         loader.setResources(I18n_Helper.getTranslationBundle());
 
@@ -53,6 +55,9 @@ public class FFmpegCommands {
             setMedia(new Media(new File(temporaryFilePath).toURI().toString()));
             updateMediaName(genName());
             updateTempFilePath();
+
+            additionalActions.run();
+
             stage.close();
         });
 
@@ -62,7 +67,7 @@ public class FFmpegCommands {
         new Thread(task).start();
     }
 
-    public static void GenerateImageCommand(String imagePath, String filter) throws IOException {
+    public static void GenerateImageCommand(String imagePath, String filter, Runnable mediaSet) throws IOException {
         File imageFile = new File(imagePath);
         setStreamData();
 
@@ -98,38 +103,10 @@ public class FFmpegCommands {
                 return null;
             }
         };
-        initiateProgressBar(task);
+        initiateProgressBar(task, mediaSet);
     }
-    public static void GenerateCropCommand(String filter) throws IOException {
-        setStreamData();
 
-        FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
-                .overrideOutputFiles(true)
-                .addOutput(Main.getAppDataFile())
-                .addExtraArgs("-filter:v",filter)
-                .done();
-        FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
-        Task<Void> task = new Task<>() {
-            @Override
-            public Void call(){
-                executor.createJob(builder, new ProgressListener() {
-                    final double duration_ns = duration * TimeUnit.MILLISECONDS.toNanos(1);
-                    @Override
-                    public void progress(Progress progress) {
-                        double percentage = progress.out_time_ns / duration_ns;
-                        long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
-                        updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
-                    }
-                }).run();
-                return null;
-            }
-        };
-        initiateProgressBar(task);
-    }
-    public static void GenerateTextCommand(String filter) throws IOException {
+    public static void GenerateTextCommand(String filter, Runnable mediaSet) throws IOException {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -160,7 +137,7 @@ public class FFmpegCommands {
                 return null;
             }
         };
-        initiateProgressBar(task);
+        initiateProgressBar(task, mediaSet);
     }
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
@@ -251,13 +228,13 @@ public class FFmpegCommands {
         };
         initiateProgressBar(task);
     }
-    public static void GenerateCropCommand(String filter) throws IOException {
+    public static void GenerateCropCommand(String filter, Runnable mediaSet) throws IOException {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(Helper.normalizePath(Main.getMedia().getSource()))
+                .setInput(CommonHelper.normalizePath(getMedia().getSource()))
                 .overrideOutputFiles(true)
-                .addOutput(Main.getAppDataFile())
+                .addOutput(getAppDataFile())
                 .addExtraArgs("-filter:v",filter)
                 .done();
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);
@@ -272,12 +249,14 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
                         updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
-                        updateTitle(String.valueOf(progress.status).equals("continue") ? "Processing.." : "End");
+                        updateTitle(String.valueOf(progress.status).equals("continue")
+                                ? I18n_Helper.getTranslation("progressBar.progress")
+                                : I18n_Helper.getTranslation("progressBar.end"));
                     }
                 }).run();
                 return null;
             }
         };
-        initiateProgressBar(task);
+        initiateProgressBar(task, mediaSet);
     }
 }

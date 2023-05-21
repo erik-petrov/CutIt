@@ -1,18 +1,26 @@
 package com.project.cutit;
 
+import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.I18n_Helper;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.media.Media;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.util.Duration;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFprobe;
 
 import java.io.File;
 import java.io.IOException;
+
+import static com.project.cutit.helpers.MenuBarHelper.isOpen;
 
 public class Main extends Application {
     private static Media Media;
@@ -20,46 +28,21 @@ public class Main extends Application {
     public static FFprobe FFprobe;
     private static String temporaryFilePath;
 
-    public static void stayAndSwitch(String fxmlFile, Stage stage) {
-        var filename = CheckFilename(fxmlFile);
-        try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
-            loader.setResources(I18n_Helper.getTranslationBundle());
-
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getCss("style"));
-            try{
-                scene.getStylesheets().add(getCss(filename.split("\\.")[0]));
-            }catch (Exception ignored){
-                System.out.println("Stylesheet missing");
-            }
-
-            stage = new Stage();
-
-            stage.setResizable(false);
-            stage.setScene(scene);
-
-            if(!fxmlFile.equals("modules")){
-                stage.showAndWait();
-            } else {
-                stage.show();
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
     public void start(Stage stage) throws IOException {
         temporaryFilePath = System.getenv("APPDATA")+"/CutIt/temp.mp4";
         new File(System.getenv("APPDATA")+"/CutIt/").mkdirs();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("startup.fxml"));
         fxmlLoader.setResources(I18n_Helper.getTranslationBundle());
-        Scene scene = new Scene(fxmlLoader.load());
+        Parent root = fxmlLoader.load();
+        root.setId("startup");
+        Scene scene = new Scene(root);
         scene.getStylesheets().add(getCss("style"));
         scene.getStylesheets().add(getCss("startup"));
-        stage.setTitle("CutIt Media player!");
+        stage.setTitle(I18n_Helper.getTranslation("cutit"));
+        stage.setResizable(false);
+        stage.onCloseRequestProperty();
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
         try{
             FFmpeg = new FFmpeg("src\\main\\resources\\ffmpeg\\bin\\ffmpeg.exe");
@@ -67,7 +50,7 @@ public class Main extends Application {
 
         }catch (Exception e){
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(I18n_Helper.getTranslation("error.ffmpegFolder"));
+            a.setContentText("Please INSTALL ffmpeg INTO resources FOLDER and RENAME the folder to 'ffmpeg'");
             a.showAndWait();
             System.exit(0);
         }
@@ -79,34 +62,78 @@ public class Main extends Application {
         return styleResource != null ? styleResource.toExternalForm() : "";
     }
 
-    public static void switchScene(String fxmlFile) {
+    public static void switchScene(Stage stage, String fxmlFile) {
         var filename = CheckFilename(fxmlFile);
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
             loader.setResources(I18n_Helper.getTranslationBundle());
 
             Parent root = loader.load();
+            root.setId(fxmlFile);
             Scene scene = new Scene(root);
+
             scene.getStylesheets().add(getCss("style"));
-            try{
+            try {
                 scene.getStylesheets().add(getCss(filename.split("\\.")[0]));
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
                 System.out.println("Stylesheet missing");
             }
 
-            Stage stage = new Stage();
-
-            stage.setResizable(false);
+            stage.setOnCloseRequest(CommonHelper.closeClick);
+            stage.setTitle(I18n_Helper.getTranslation("cutit"));
             stage.setScene(scene);
 
-            if(!fxmlFile.equals("modules")){
-                stage.showAndWait();
-            } else {
-                stage.show();
-            }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public static void switchScene(String fxmlFile) {
+        var filename = CheckFilename(fxmlFile);
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(filename));
+            loader.setResources(I18n_Helper.getTranslationBundle());
+
+            var lastStage = getLastStage();
+
+            Parent root = loader.load();
+            root.setId(fxmlFile);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getCss("style"));
+
+            try {
+                scene.getStylesheets().add(getCss(filename.split("\\.")[0]));
+            } catch (Exception ignored){
+
+                System.out.println("Stylesheet missing");
+            }
+
+            Stage stage = !isOpen ? lastStage : new Stage();
+            stage.setResizable(false);
+            stage.setOnCloseRequest(CommonHelper.closeClick);
+            stage.setTitle(I18n_Helper.getTranslation("cutit"));
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            if (!isOpen) {
+                lastStage.close();
+            }
+
+            stage.show();
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static Stage getLastStage() {
+        var windows = Window.getWindows();
+        try {
+            return (Stage) windows.get(windows.size() - 1);
+        }catch (Exception ignored) {
+            return new Stage();
+        }
+
     }
 
     public static String CheckFilename(String fxmlFile) {

@@ -33,49 +33,43 @@
          <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-   <Pane fx:id="boxOptions" layoutX="34.0" layoutY="347.0" prefHeight="108.0" prefWidth="200.0">
-      <Label layoutX="-1.0" layoutY="5.0" prefHeight="20.0" prefWidth="71.0" text="%addText.control.boxColor" textAlignment="CENTER">
+   <Pane fx:id="boxOptions" layoutX="34.0" layoutY="347.0" prefHeight="75.0" prefWidth="217.0">
+      <Label layoutX="-1.0" layoutY="5.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.boxColor" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ColorPicker fx:id="boxColor" layoutX="153.0" layoutY="3.0" prefHeight="25.0" prefWidth="46.0">
+      <ColorPicker fx:id="boxColor" layoutX="166.0" layoutY="3.0" prefHeight="25.0" prefWidth="46.0">
          <value>
             <Color red="0.9882352948188782" green="0.6392157077789307" blue="0.06666667014360428" />
          </value>
       </ColorPicker>
-      <TextField fx:id="boxBorder" layoutX="153.0" layoutY="43.0" prefHeight="25.0" prefWidth="46.0" />
-      <Label layoutX="-1.0" layoutY="45.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.boxBorder" textAlignment="CENTER">
+      <Label layoutX="-5.0" layoutY="35.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.boxOpacity" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="-1.0" layoutY="84.0" prefHeight="20.0" prefWidth="53.0" text="%addText.control.boxOpacity" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Slider fx:id="boxOpacity" blockIncrement="0.1" layoutX="96.0" layoutY="85.0" prefHeight="14.0" prefWidth="114.0" showTickLabels="true" showTickMarks="true" />
+      <Slider fx:id="boxOpacity" blockIncrement="0.1" layoutX="109.0" layoutY="36.0" prefHeight="14.0" prefWidth="114.0" showTickLabels="true" showTickMarks="true" value="100.0" />
    </Pane>
-   <Pane layoutX="41.0" layoutY="102.0" prefHeight="81.0" prefWidth="185.0">
-      <TextField fx:id="fontSize" layoutX="133.0" prefHeight="14.0" prefWidth="46.0" />
-      <Label layoutY="3.0" prefHeight="20.0" prefWidth="64.0" text="%addText.control.fontSize" textAlignment="RIGHT">
+   <Pane layoutX="41.0" layoutY="102.0" prefHeight="81.0" prefWidth="243.0">
+      <TextField fx:id="fontSize" layoutX="197.0" layoutY="-2.0" prefHeight="14.0" prefWidth="46.0" />
+      <Label layoutY="3.0" prefHeight="20.0" prefWidth="192.0" text="%addText.control.fontSize">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutY="34.0" prefHeight="20.0" prefWidth="71.0" text="%addText.control.fontColor" textAlignment="RIGHT">
+      <Label layoutY="34.0" prefHeight="20.0" prefWidth="192.0" text="%addText.control.fontColor">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ColorPicker fx:id="fontColor" layoutX="133.0" layoutY="31.0" prefHeight="25.0" prefWidth="46.0">
+      <ColorPicker fx:id="fontColor" layoutX="197.0" layoutY="29.0" prefHeight="25.0" prefWidth="46.0">
          <value>
             <Color red="0.9882352948188782" green="0.6392157077789307" blue="0.06666667014360428" />
          </value>
       </ColorPicker>
-      <TextField fx:id="fontBorder" layoutX="133.0" layoutY="61.0" prefHeight="25.0" prefWidth="46.0" />
-      <Label layoutY="63.0" prefHeight="20.0" prefWidth="114.0" text="%addText.control.fontBorder" textAlignment="CENTER">
+      <TextField fx:id="fontBorder" layoutX="197.0" layoutY="59.0" prefHeight="25.0" prefWidth="46.0" text="0" />
+      <Label layoutY="63.0" prefHeight="20.0" prefWidth="192.0" text="%addText.control.fontBorder">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -86,24 +80,25 @@
          <Font name="System Bold" size="12.0" />
       </font>
    </CheckBox>
-   <MenuBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
+   <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
       <Menu mnemonicParsing="false" text="%menubar.file.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" onAction="#SaveAs"/>
-         <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
+         <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
+         <MenuItem mnemonicParsing="false" onAction="#SaveAs" text="%menubar.file.saveAs" />
+         <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.language.title">
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
          <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.module.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.module.player" userData="player" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.addImage" userData="addImage" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.crop" userData="crop" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.cut" userData="cut" />
-         <MenuItem mnemonicParsing="false" text="%menubar.module.time" userData="time" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.player" userData="player" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.addImage" userData="addImage" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.crop" userData="crop" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.cut" userData="cut" />
+         <MenuItem mnemonicParsing="false" onAction="#ModuleSwitch" text="%menubar.module.time" userData="time" />
       </Menu>
       <Menu mnemonicParsing="false" text="%menubar.help.title">
-         <MenuItem mnemonicParsing="false" text="%menubar.help.about" />
+         <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
       </Menu>
    </MenuBar>
 </AnchorPane>

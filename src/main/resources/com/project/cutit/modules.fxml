@@ -6,20 +6,20 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.ModuleController">
-     <MenuBar maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
-         <Menu mnemonicParsing="false" text="%menubar.file.title">
-             <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
-             <MenuItem mnemonicParsing="false" text="%menubar.file.saveAs" onAction="#SaveAs"/>
-             <MenuItem mnemonicParsing="false" text="%menubar.file.exit" onAction="#WindowExit" />
-         </Menu>
-         <Menu mnemonicParsing="false" text="%menubar.language.title">
-             <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
-             <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
-         </Menu>
-         <Menu mnemonicParsing="false" text="%menubar.help.title">
-             <MenuItem mnemonicParsing="false" text="%menubar.help.about" />
-         </Menu>
-     </MenuBar>
+    <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
+        <Menu mnemonicParsing="false" text="%menubar.file.title">
+            <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
+            <MenuItem mnemonicParsing="false" onAction="#SaveAs" text="%menubar.file.saveAs" />
+            <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.language.title">
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.en" userData="en-GB" />
+            <MenuItem mnemonicParsing="false" onAction="#LanguageSwitch" text="%menubar.language.et" userData="et-ET" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menubar.help.title">
+            <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
+        </Menu>
+    </MenuBar>
      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.topAnchor="30.0">
 
        <columnConstraints>
@@ -44,7 +44,7 @@
                <Font name="Arial" size="24.0" />
            </font>
          </Button>
-         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" styleClass="alternative-button" textAlignment="CENTER" userData="cut" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" prefHeight="200.0" prefWidth="200.0" styleClass="alternative-button" textAlignment="CENTER" userData="cut" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
              <graphic>
                  <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../../../icons/trim.png" />
@@ -57,7 +57,7 @@
                <Font name="Arial" size="24.0" />
            </font>
          </Button>
-         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" textAlignment="CENTER" userData="crop" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ToModule" textAlignment="CENTER" userData="crop" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
              <graphic>
                  <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../../../icons/crop.png" />
