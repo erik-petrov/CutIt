@@ -150,7 +150,7 @@ public class CommonHelper {
         boolean playing = _mediaPlayer.getStatus().equals(MediaPlayer.Status.PLAYING);
 
         if (playing) {
-            _mediaPlayer.pause();
+            _mediaPlayer.stop();
         } else {
             _mediaPlayer.play();
         }

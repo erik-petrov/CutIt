@@ -94,7 +94,7 @@ public class FFmpegCommands {
                         double percentage = progress.out_time_ns / duration_ns;
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft/1000000000, TimeUnit.SECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
                                 ? I18n_Helper.getTranslation("progressBar.progress")
                                 : I18n_Helper.getTranslation("progressBar.end"));
@@ -127,7 +127,7 @@ public class FFmpegCommands {
                                 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed)
                                 : (long) duration_ns;
                         updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft/1000000000, TimeUnit.SECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
                                 ? I18n_Helper.getTranslation("progressBar.progress")
                                 : I18n_Helper.getTranslation("progressBar.end"));
@@ -173,7 +173,7 @@ public class FFmpegCommands {
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed)
                                 : (long) duration_ns;
                         updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft/1000000000, TimeUnit.SECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
                                 ? I18n_Helper.getTranslation("progressBar.progress")
                                 : I18n_Helper.getTranslation("progressBar.end"));
@@ -216,7 +216,7 @@ public class FFmpegCommands {
                         double percentage = progress.out_time_ns / duration_ns;
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft/1000000000, TimeUnit.SECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
                                 ? I18n_Helper.getTranslation("progressBar.progress")
                                 : I18n_Helper.getTranslation("progressBar.end"));
@@ -248,7 +248,7 @@ public class FFmpegCommands {
                         double percentage = progress.out_time_ns / duration_ns;
                         long timeLeft = duration_ns - progress.out_time_ns > 0 ? (long) ((duration_ns - progress.out_time_ns) / progress.speed) : (long) duration_ns;
                         updateProgress(percentage, 1.0);
-                        updateMessage(FFmpegUtils.toTimecode(timeLeft, TimeUnit.NANOSECONDS));
+                        updateMessage(FFmpegUtils.toTimecode(timeLeft/1000000000, TimeUnit.SECONDS));
                         updateTitle(String.valueOf(progress.status).equals("continue")
                                 ? I18n_Helper.getTranslation("progressBar.progress")
                                 : I18n_Helper.getTranslation("progressBar.end"));

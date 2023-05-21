@@ -3,8 +3,10 @@ package com.project.cutit.controllers;
 import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.I18n_Helper;
 import com.project.cutit.helpers.MenuBarHelper;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -17,9 +19,16 @@ public class PlayerController extends MenuBarHelper {
     private MediaPlayer mediaPlayer;
     private CommonHelper Helper;
 
+    public final EventHandler<KeyEvent> keyListener = event -> {
+        if(event.getCode() == KeyCode.SPACE) {
+            Toggle();
+        }
+        event.consume();
+    };
+
     public void initialize() {
         Helper =  new CommonHelper(mediaPlayer, mediaView,
-                () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, Helper.keyListener));
+                () -> mediaView.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener));
         Helper.setMediaItems();
     }
 

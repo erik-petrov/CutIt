@@ -73,7 +73,13 @@ public abstract class MenuBarHelper {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(I18n_Helper.getTranslation("fileChooser.saveAs.title"));
         fileChooser.setInitialDirectory(new File(CommonHelper.getDesktop()));
-        fileChooser.getExtensionFilters().add( new FileChooser.ExtensionFilter("MP4 (*.mp4)", "*.mp4"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter(
+                        "Select video format:",
+                        "*.mp4",
+                        "*.avi"
+                )
+        );
         File file = fileChooser.showSaveDialog(menuItem.getParentPopup().getOwnerWindow().getScene().getWindow());
         if (file != null) {
             try {
