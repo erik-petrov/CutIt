@@ -2,7 +2,6 @@ package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
 import com.project.cutit.helpers.CommonHelper;
-import com.project.cutit.Main;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
@@ -66,7 +64,7 @@ public class AddTextController extends MenuBarHelper {
 
 
         var videoFilter = String.format("drawtext=text='%s':fontsize=%s:fontcolor=%s:x=%s:y=%s:borderw=%s%s", text.getText(), fontSize.getText(), fontColor.getValue().toString(),cordX.getText(), cordY.getText(), fontBorder.getText(), box);
-        FFmpegCommands.GenerateTextCommand(videoFilter,() -> Helper.setMediaItems());
+        FFmpegCommands.GenerateTextCommand(videoFilter);
     }
 
     public void AddBoxClick(ActionEvent actionEvent) {

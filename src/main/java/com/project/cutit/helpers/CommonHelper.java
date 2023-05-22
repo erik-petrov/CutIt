@@ -10,7 +10,6 @@ import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 import java.io.File;
 
@@ -24,12 +23,16 @@ public class CommonHelper {
     public CommonHelper(MediaPlayer plr, MediaView view) {
         _mediaPlayer = plr;
         _mediaView = view;
+
+        CommonHelperManager.registerHelper(this);
     }
 
     public CommonHelper(MediaPlayer plr, MediaView view, Runnable runnable) {
         _mediaPlayer = plr;
         _mediaView = view;
         _runnable =  runnable;
+
+        CommonHelperManager.registerHelper(this);
     }
     public MediaView getMediaView() { return _mediaView; }
     public MediaPlayer getMediaPlayer() { return _mediaPlayer; }
@@ -95,7 +98,7 @@ public class CommonHelper {
     public Alert setAlert(String key, Alert.AlertType type) {
         var alert = new Alert(type);
         alert.setTitle(I18n_Helper.getTranslation("alert"));
-
+        alert.setHeaderText("");
         var alertText = I18n_Helper.getTranslation(key);
         if (type == Alert.AlertType.ERROR) alertText+= " " + I18n_Helper.getTranslation("error.fieldText");
 

@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class I18n_Helper {
-    private static Locale projectLocale = Locale.forLanguageTag("en-GB");
+    private static Locale projectLocale = Locale.forLanguageTag("et-ET");
     private static ResourceBundle translationBundle = ResourceBundle.getBundle("com.project.cutit.translation", projectLocale);
 
     public static String getTranslation(String key) {

@@ -17,7 +17,6 @@
    </Button>
     <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="600.0">
         <Menu mnemonicParsing="false" text="%menubar.file.title">
-            <CheckMenuItem mnemonicParsing="false" onAction="#KeepOpen" text="%menubar.file.keepMenu" />
             <MenuItem mnemonicParsing="false" onAction="#WindowExit" text="%menubar.file.exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="%menubar.language.title">

@@ -3,9 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.media.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.cutit.controllers.TimeController">
-   <MediaView fx:id="mediaView" fitHeight="514.0" fitWidth="900.0" layoutX="44.0" layoutY="50.0" />
+   <StackPane layoutX="50.0" layoutY="66.0" prefHeight="514.0" prefWidth="846.0" styleClass="alignment-pane">
+      <children>
+          <MediaView fx:id="mediaView" fitHeight="514.0" fitWidth="900.0" />
+      </children>
+   </StackPane>
    <Slider fx:id="speedSlider" blockIncrement="1.0" layoutX="44.0" layoutY="577.0" majorTickUnit="2.0" max="10.0" min="-10.0" minorTickCount="1" prefHeight="14.0" prefWidth="500.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
    <Button fx:id="timeButton" alignment="CENTER" layoutX="575.0" layoutY="583.0" mnemonicParsing="false" onAction="#ChangeSpeed" text="%time.button" />
    <MenuBar fx:id="menubar" layoutY="1.0" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="1000.0">
@@ -29,4 +34,8 @@
          <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
       </Menu>
    </MenuBar>
+   <Label alignment="CENTER" layoutX="438.0" layoutY="31.0" text="%time.title" textAlignment="CENTER">
+      <font>
+         <Font name="System Bold" size="24.0" />
+      </font></Label>
 </AnchorPane>

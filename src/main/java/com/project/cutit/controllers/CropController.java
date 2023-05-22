@@ -1,14 +1,12 @@
 package com.project.cutit.controllers;
 
 import com.project.cutit.FFmpegCommands;
-import com.project.cutit.Main;
 import com.project.cutit.helpers.CommonHelper;
 import com.project.cutit.helpers.MenuBarHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
@@ -50,6 +48,6 @@ public class CropController extends MenuBarHelper {
 
         String filter = "crop="+w+":"+h+":"+xV+":"+yV;
 
-        FFmpegCommands.GenerateCropCommand(filter, () -> Helper.setMediaItems());
+        FFmpegCommands.GenerateCropCommand(filter);
     }
 }
