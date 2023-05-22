@@ -47,8 +47,12 @@ public class AddImageController extends MenuBarHelper {
     public void OpenFile(ActionEvent ev){
         File selectedFile = Helper.OpenFileDialog(ev);
         if (selectedFile != null) {
-            imageView.setImage(new Image(selectedFile.getAbsolutePath()));
-            dragLabel.setVisible(false);
+            var fileExtension = getFileExtension(selectedFile.getName()).toLowerCase();
+
+            if (isImageFile(fileExtension) || isGifFile(fileExtension)) {
+                imageView.setImage(new Image(selectedFile.getAbsolutePath()));
+                dragLabel.setVisible(false);
+            }
         }
     }
 
@@ -57,13 +61,33 @@ public class AddImageController extends MenuBarHelper {
 
         boolean success = false;
         if (dragboard.hasFiles()) {
-            imageView.setImage(new Image(dragboard.getFiles().get(0).toURI().toString()));
-            dragLabel.setVisible(false);
-            success = true;
+            File file = dragboard.getFiles().get(0);
+            var fileExtension = getFileExtension(file.getName()).toLowerCase();
+
+            if (isImageFile(fileExtension) || isGifFile(fileExtension)) {
+                imageView.setImage(new Image(file.toURI().toString()));
+                dragLabel.setVisible(false);
+                success = true;
+            } else {
+                Helper.setAlert("error.image", Alert.AlertType.ERROR);
+            }
         }
 
         dragEvent.setDropCompleted(success);
         dragEvent.consume();
+    }
+
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
+    }
+
+    private boolean isImageFile(String fileExtension) {
+        return fileExtension.equals("jpg") || fileExtension.equals("jpeg") || fileExtension.equals("png");
+    }
+
+    private boolean isGifFile(String fileExtension) {
+        return fileExtension.equals("gif");
     }
 
     public void OnDragOver(DragEvent dragEvent) {
