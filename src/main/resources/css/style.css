@@ -48,8 +48,8 @@ Border Color = Black
     -fx-text-fill: #E5E5E5;
     -fx-border-radius: 20;
 }
-.slider .axis .axis-tick-label {
-    -fx-text-fill: black;
+.slider .axis {
+    -fx-tick-label-fill: #E5E5E5;
 }
 
 .check-box {
@@ -62,4 +62,7 @@ Border Color = Black
 
 .text-field, .text-area {
     -fx-prompt-text-fill: darkgrey;
+}
+.alignment-pane {
+    -fx-background-color: #14213D
 }

@@ -97,7 +97,7 @@ public class AddImageController extends MenuBarHelper {
         }
         imageFilter += String.format("overlay=%s:%s", cordX.getText(), cordY.getText());
 
-        FFmpegCommands.GenerateImageCommand(imageView.getImage().getUrl(), imageFilter, () -> Helper.setMediaItems());
+        FFmpegCommands.GenerateImageCommand(imageView.getImage().getUrl(), imageFilter);
     }
 }
 

@@ -27,7 +27,11 @@
             <MenuItem mnemonicParsing="false" onAction="#AboutWindow" text="%menubar.help.about" />
         </Menu>
     </MenuBar>
-    <MediaView fx:id="mediaView" fitHeight="500.0" fitWidth="889.0" layoutX="78.0" layoutY="75.0" onMouseClicked="#mediaClick" />
+   <StackPane layoutX="78.0" layoutY="75.0"  prefHeight="500.0" prefWidth="889.0" styleClass="alignment-pane">
+      <children>
+          <MediaView fx:id="mediaView" fitHeight="500.0" fitWidth="889.0" onMouseClicked="#mediaClick" />
+      </children>
+   </StackPane>
     <TextField fx:id="width" layoutX="127.0" layoutY="591.0" />
     <TextField fx:id="y" layoutX="326.0" layoutY="646.0" />
     <TextField fx:id="height" layoutX="127.0" layoutY="650.0" />

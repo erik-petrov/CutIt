@@ -2,6 +2,7 @@ package com.project.cutit;
 
 import com.project.cutit.controllers.ProgressController;
 import com.project.cutit.helpers.CommonHelper;
+import com.project.cutit.helpers.CommonHelperManager;
 import com.project.cutit.helpers.I18n_Helper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +39,7 @@ public class FFmpegCommands {
 
         return salt.toString();
     }
-    public static void initiateProgressBar(Task<Void> task) throws IOException { initiateProgressBar(task, () -> {}); }
+    public static void initiateProgressBar(Task<Void> task) throws IOException { initiateProgressBar(task, () -> CommonHelperManager.triggerSetMediaItems()); }
 
     public static void initiateProgressBar(Task<Void> task, Runnable additionalActions) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("progress.fxml"));
@@ -57,7 +58,7 @@ public class FFmpegCommands {
             updateTempFilePath();
 
             additionalActions.run();
-
+            CommonHelperManager.triggerSetMediaItems();
             stage.close();
         });
 
@@ -67,7 +68,7 @@ public class FFmpegCommands {
         new Thread(task).start();
     }
 
-    public static void GenerateImageCommand(String imagePath, String filter, Runnable mediaSet) throws IOException {
+    public static void GenerateImageCommand(String imagePath, String filter) throws IOException {
         File imageFile = new File(imagePath);
         setStreamData();
 
@@ -103,10 +104,10 @@ public class FFmpegCommands {
                 return null;
             }
         };
-        initiateProgressBar(task, mediaSet);
+        initiateProgressBar(task);
     }
 
-    public static void GenerateTextCommand(String filter, Runnable mediaSet) throws IOException {
+    public static void GenerateTextCommand(String filter) throws IOException {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -137,7 +138,7 @@ public class FFmpegCommands {
                 return null;
             }
         };
-        initiateProgressBar(task, mediaSet);
+        initiateProgressBar(task);
     }
     public static void GenerateCutCommand(Integer from, Integer to) throws IOException {
         long duration = (long)(to.doubleValue() - from.doubleValue());
@@ -228,7 +229,7 @@ public class FFmpegCommands {
         };
         initiateProgressBar(task);
     }
-    public static void GenerateCropCommand(String filter, Runnable mediaSet) throws IOException {
+    public static void GenerateCropCommand(String filter) throws IOException {
         setStreamData();
 
         FFmpegBuilder builder = new FFmpegBuilder()
@@ -257,6 +258,6 @@ public class FFmpegCommands {
                 return null;
             }
         };
-        initiateProgressBar(task, mediaSet);
+        initiateProgressBar(task);
     }
 }
