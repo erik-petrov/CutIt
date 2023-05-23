@@ -36,12 +36,14 @@ public class FFmpegStreamHelper {
             }
         }
 
-        sampleRate = audioStream.sample_rate > 0 ? audioStream.sample_rate : 48_000;
+        if(audioStream != null){
+            sampleRate = audioStream.sample_rate > 0 ? audioStream.sample_rate : 48_000;
+            audioCodec = audioStream.codec_name;
+            audioChannels = audioStream.channels <= 0 ? 1 : audioStream.channels;
+        }
         bitRate = videoStream.bit_rate > 0 ? videoStream.bit_rate : 32768;
         frameRate = videoStream.avg_frame_rate.intValue();
-        audioChannels = audioStream.channels <= 0 ? 1 : audioStream.channels;
         duration = videoStream.duration;
-        audioCodec = audioStream.codec_name;
         videoCodec = videoStream.codec_name;
     }
 }
