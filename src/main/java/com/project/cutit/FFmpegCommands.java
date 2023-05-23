@@ -186,24 +186,17 @@ public class FFmpegCommands {
         };
         initiateProgressBar(task);
     }
-    public static void GenerateSpeedCommand(Double factor, String[] extras, String filter) throws IOException {
+    public static void GenerateSpeedCommand(Double factor) throws IOException {
         setStreamData();
+
+        String filter = factor >= 0.5 && audioChannels != 0  ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
+        String[] extras = factor >= 0.5 && audioChannels != 0 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(CommonHelper.normalizePath(Main.getMedia().getSource()))
                 .overrideOutputFiles(true)
-
                 .addOutput(temporaryFilePath)
                 .addExtraArgs(extras)
-
-                .setAudioChannels(audioChannels)
-                .setAudioCodec(audioCodec)
-                .setAudioSampleRate(sampleRate)
-                .setAudioBitRate(bitRate)
-
-                .setVideoCodec(videoCodec)
-                .setVideoFrameRate(frameRate, 1)
-
                 .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
                 .done().setComplexFilter(filter);
         FFmpegExecutor executor = new FFmpegExecutor(FFmpeg, FFprobe);

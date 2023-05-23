@@ -42,9 +42,6 @@ public class TimeController extends MenuBarHelper {
             factor = 1.0;
         }
 
-        String filter = factor >= 0.5 ? "[0:v]setpts="+1/factor+"*PTS[v];[0:a]atempo="+factor+"[a]" : "[0:v]setpts="+1/factor+"*PTS[v]"; //if slowdown then no audio
-        String[] extras = factor >= 0.5 ? new String[]{"-map", "[a]", "-map", "[v]"} : new String[]{"-map", "[v]"};
-
-        FFmpegCommands.GenerateSpeedCommand(factor, extras, filter);
+        FFmpegCommands.GenerateSpeedCommand(factor);
     }
 }
